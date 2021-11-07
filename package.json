@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "vite",
     "start": "vite",
-    "build": "vite build --mode=production",
+    "build": "vite build --mode=production && esno ./build/script/runBuild.ts",
     "build:stag": "vite build --mode=staging",
     "serve": "vite preview"
   },
@@ -27,7 +27,10 @@
     "vue-i18n": "^9.1.6",
     "vue-router": "4",
     "vuex": "^4.0.0",
-    "xlsx": "^0.17.1"
+    "xlsx": "^0.17.1",
+    "esno": "^0.8.0",
+    "fs-extra": "^10.0.0",
+    "vue3-sfc-loader": "^0.8.4"
   },
   "devDependencies": {
     "@types/node": "^16.7.8",
