@@ -7,7 +7,12 @@ import NProgress from '@/utils/system/nprogress'
 export function createNameComponent(component: any) {
   return () => {
     return new Promise((res) => {
-      component().then((comm: any) => {
+      if(typeof component == "function") {
+        component = component();
+      }
+      component.then((comm: any) => {
+        if(!comm.default) comm = {default: comm};
+
         const name = (comm.default.name || 'vueAdminBox') + '$' + Date.now();
         const tempComm = defineComponent({
           name,

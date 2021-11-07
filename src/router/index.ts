@@ -8,6 +8,10 @@ import store from '@/store'
 import i18n from '@/locale'
 import NProgress from '@/utils/system/nprogress'
 import { changeTitle } from '@/utils/system/title'
+import { getMenus } from '@/api/menu'
+import Layout from '@/layout/index.vue'
+import { createNameComponent } from '../createNode'
+import { asyncLoadModule, loadModuleOptions } from '@/utils/admin/sfc-loader'
 
 NProgress.configure({ showSpinner: false })
 
@@ -47,7 +51,7 @@ const router = createRouter({
 let asyncRoutes: RouteRecordRaw[] = [
   ...Dashboard,
   ...Document,
-  ...Component,
+  // ...Component,
   ...Pages,
   ...Menu,
   ...Directive,
@@ -56,6 +60,28 @@ let asyncRoutes: RouteRecordRaw[] = [
   ...Print,
   ...Community,
 ]
+
+/**
+ *
+ * @param menus
+ */
+export function transferMenuToRouter(menus: RouteRecordRaw[]) {
+  menus.forEach(item => {
+    if(item.component == "Layout") {
+      item.component = Layout;
+    } else {
+      if(typeof item.component === "string") {
+        item.component = createNameComponent(asyncLoadModule(item.component, loadModuleOptions));
+      }
+    }
+    if(item.children) {
+      item.children = transferMenuToRouter(item.children);
+    }
+  })
+
+  return menus;
+}
+
 // 动态路由的权限新增，供登录后调用
 export async function addRoutes() {
 
@@ -92,6 +118,14 @@ export async function addRoutes() {
     modules.push(item)
     router.addRoute(item)
   })
+  getMenus().then(data => {
+    if(data.data) {
+      transferMenuToRouter(data.data).forEach(item => {
+        modules.push(item)
+        router.addRoute(item)
+      })
+    }
+  });
 }
 
 // 重置匹配所有路由的解决方案，todo
