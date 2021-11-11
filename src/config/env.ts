@@ -18,9 +18,10 @@ export interface ViteEnv {
     VITE_PROXY: any;
     VITE_PUBLIC_PATH: string;
     // 所有打包至_app.config.js中的
-    VITE_GLOB_APP_TITLE: string;
-    VITE_GLOB_APP_SHORT_NAME: string;
-    VITE_GLOB_CAPTCHA_URL: string;
+    VITE_GLOB_APP_TITLE: string;// 网站名
+    VITE_GLOB_APP_SUB_TITLE: string;// 登录时候显示的subtitle
+    VITE_GLOB_APP_SHORT_NAME: string;// 英文名称
+    VITE_GLOB_CAPTCHA_URL: string;// 验证码地址
     // 预留出来的，如果开发人员需要新增某一个默认参数，可以直接改
     [key: string]: string|number|boolean;
 }
