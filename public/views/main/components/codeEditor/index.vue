@@ -17,48 +17,47 @@
 
 <script>
 import { defineComponent, ref, onMounted, watch } from 'vue';
-import { codeMirror } from '@/components/codeMirror/index.ts';
-
+import { codeMirror } from '@/components/codeMirror/index';
 export default defineComponent({
   setup() {
-    let dom = ref(null);
-    let codeData = ref('');
-    let editor = ref(null);
-    let timer = null;
-    let editorChange = false;
+    let dom = ref(null)
+    let codeData = ref('')
+    let editor = ref(null)
+    let timer = null
+    let editorChange = false
     const options = {
       value: codeData.value,
       lineNumbers: true,
       mode: "javascript",
       theme: '3024-night'
-    };
+    }
     onMounted(() => {
-      editor = codeMirror(dom.value, options);
-      handleChange();
-    });
+      editor = codeMirror(dom.value, options)
+      handleChange()
+    })
     function handleChange() {
       editor.on('changes', () => {
-        editorChange = true;
-        timer = null;
-        codeData.value = editor.getValue();
+        editorChange = true
+        timer = null
+        codeData.value = editor.getValue()
         timer = setTimeout(() => {
-          editorChange = false;
+          editorChange = false
         }, 50)
-      });
+      })
     }
     // watch the codeData change but not from editor change
     watch(codeData, (newVal, oldVal) => {
       if (!editorChange) {
-        setEditorData();
+        setEditorData()
       }
-    });
+    })
     // to show how to do a v-model demo
     function setData() {
-      codeData.value = `let name = "张三"\n function setName() {\n name = "李四" \n}`;
+      codeData.value = `let name = "张三"\n function setName() {\n name = "李四" \n}`
     }
     // set editor data anytime when you use this function
     function setEditorData() {
-      editor.getDoc().setValue(codeData.value);
+      editor.getDoc().setValue(codeData.value)
     }
     return {
       dom,

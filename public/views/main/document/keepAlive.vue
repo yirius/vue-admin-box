@@ -20,11 +20,11 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-  .layout-container article {
-    padding: 0 20px;
-  }
-  .layout-container article p {
-    text-align: left;
-  }
+<style  scoped>
+.layout-container article {
+  padding: 0 20px;
+}
+.layout-container article p {
+  text-align: left;
+}
 </style>

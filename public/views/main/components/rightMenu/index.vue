@@ -29,7 +29,6 @@ import basic from "./basic.vue";
 import menuGroup from "./menuGroup.vue";
 import menuDynamic from "./menuDynamic.vue";
 import "v-contextmenu/dist/themes/default.css"
-
 export default defineComponent({
   components: {
     basic,
@@ -42,7 +41,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
   .el-row {
     height: 100%;
     flex: 1;

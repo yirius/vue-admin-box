@@ -14,12 +14,12 @@ export default [
                         path: '/',
                         component: 'Layout',
                         redirect: '/dashboard',
-                        meta: { title: 'message.menu.dashboard.name', icon: 'el-icon-menu' },
+                        meta: { title: 'message.menu.dashboard.name', icon: 'sfont system-home' },
                         children: [
                             {
                                 path: 'dashboard',
                                 component: '/views/main/dashboard/index.vue',
-                                meta: { title: 'message.menu.dashboard.index', icon: 'el-icon-menu', hideClose: true }
+                                meta: { title: 'message.menu.dashboard.index', icon: 'sfont system-home', hideClose: true }
                             }
                         ]
                     },
@@ -27,7 +27,7 @@ export default [
                         path: '/document',
                         component: 'Layout',
                         redirect: '/document/intro',
-                        meta: { title: 'message.menu.document.name', icon: 'el-icon-document' },
+                        meta: { title: 'message.menu.document.name', icon: 'sfont system-document' },
                         children: [
                             {
                                 path: 'intro',
@@ -65,7 +65,7 @@ export default [
                         path: '/component',
                         component: 'Layout',
                         redirect: '/component/table',
-                        meta: { title: 'message.menu.component.name', icon: 'el-icon-s-ticket' },
+                        meta: { title: 'message.menu.component.name', icon: 'sfont system-component' },
                         alwayShow: true,
                         children: [
                             {
@@ -119,7 +119,239 @@ export default [
                                 meta: { title: 'message.menu.component.exportExcel' },
                             },
                         ]
-                    }
+                    },
+                    {
+                        path: '/pages',
+                        component: 'Layout',
+                        redirect: '/pages/crudTable',
+                        meta: { title: 'message.menu.page.name', icon: 'sfont system-page' },
+                        alwayShow: true,
+                        children: [
+                            {
+                                path: 'crudTable',
+                                component: '/views/main/pages/crudTable/index.vue',
+                                meta: { title: 'message.menu.page.crudTable', cache: false, roles: ['admin', 'editor'] }
+                            },
+                            {
+                                path: 'categoryTable',
+                                component: '/views/main/pages/categoryTable/index.vue',
+                                meta: { title: 'message.menu.page.categoryTable', cache: true, roles: ['admin'] }
+                            },
+                            {
+                                path: 'treeTable',
+                                component: '/views/main/pages/treeTable/index.vue',
+                                meta: { title: 'message.menu.page.treeTable', cache: true }
+                            },
+                            {
+                                path: 'card',
+                                component: '/views/main/pages/card/index.vue',
+                                meta: { title: 'message.menu.page.card', cache: true }
+                            },
+                            {
+                                path: 'work',
+                                component: '/views/main/pages/work/index.vue',
+                                meta: { title: 'message.menu.page.work' }
+                            },
+                            {
+                                path: 'blog',
+                                component: '/views/main/pages/baidu/index.vue',
+                                meta: { title: 'message.menu.page.baidu' }
+                            },
+                        ]
+                    },
+                    {
+                        path: '/menu',
+                        component: 'Layout',
+                        redirect: '/menu/menu-1',
+                        alwayShow: true,
+                        meta: { title: 'message.menu.menu.name', icon: 'sfont system-menu' },
+                        children: [
+                            {
+                                path: 'menu-1',
+                                component: '@/components/menu/index.vue',
+                                redirect: '/menu/menu-1/menu-1-1',
+                                meta: { title: 'message.menu.menu.menu_1' },
+                                children: [
+                                    {
+                                        path: 'menu-1-1',
+                                        component: '@/components/menu/index.vue',
+                                        redirect: '/menu/menu-1/menu-1-1/menu-1-1-1',
+                                        meta: { title: 'message.menu.menu.menu_1_1' },
+                                        children: [
+                                            {
+                                                path: 'menu-1-1-1',
+                                                component: '/views/main/menu/menu-1/menu-1-1/menu-1-1-1.vue',
+                                                meta: { title: 'message.menu.menu.menu_1_1_1' },
+                                            },
+                                            {
+                                                path: 'menu-1-1-2',
+                                                component: '/views/main/menu/menu-1/menu-1-1/menu-1-1-2.vue',
+                                                meta: { title: 'message.menu.menu.menu_1_1_2' },
+                                            },
+                                        ]
+                                    },
+                                    {
+                                        path: 'menu-1-2',
+                                        component: '/views/main/menu/menu-1/menu-1-2.vue',
+                                        meta: { title: 'message.menu.menu.menu_1_2' },
+                                    },
+                                ]
+                            },
+                            {
+                                path: 'menu-2',
+                                component: '/views/main/menu/menu-2.vue',
+                                meta: { title: 'message.menu.menu.menu_2' }
+                            },
+                            {
+                                path: 'menu-3',
+                                component: '/views/main/menu/menu-3.vue',
+                                meta: { title: 'message.menu.menu.menu_3' }
+                            },
+                        ]
+                    },
+                    {
+                        path: '/directive',
+                        component: 'Layout',
+                        redirect: '/directive/copy',
+                        meta: { title: 'message.menu.directive.name', icon: 'sfont system-zidingyi' },
+                        children: [
+                            {
+                                path: 'dragable',
+                                component: '/views/main/directive/dragable.vue',
+                                meta: { title: 'message.menu.directive.dragable' }
+                            },
+                            {
+                                path: 'copy',
+                                component: '/views/main/directive/copy.vue',
+                                meta: { title: 'message.menu.directive.copy' }
+                            },
+                            {
+                                path: 'waterMarker',
+                                component: '/views/main/directive/waterMarker.vue',
+                                meta: { title: 'message.menu.directive.waterMarker' }
+                            },
+                            {
+                                path: 'longpress',
+                                component: '/views/main/directive/longpress.vue',
+                                meta: { title: 'message.menu.directive.longpress' }
+                            },
+                            {
+                                path: 'debounce',
+                                component: '/views/main/directive/debounce.vue',
+                                meta: { title: 'message.menu.directive.debounce' }
+                            },
+                            {
+                                path: 'scroll',
+                                component: '/views/main/directive/infiniteScroll.vue',
+                                meta: { title: 'message.menu.directive.scroll' }
+                            },
+                            {
+                                path: 'clickOutside',
+                                component: '/views/main/directive/clickOutside.vue',
+                                meta: { title: 'message.menu.directive.clickOutside' }
+                            }
+                        ]
+                    },
+                    {
+                        path: '/echarts',
+                        component: 'Layout',
+                        redirect: '/echarts/dragable',
+                        meta: { title: 'message.menu.echarts.name', icon: 'sfont system-chart' },
+                        children: [
+                            {
+                                path: 'bar',
+                                component: '/views/main/echarts/bar.vue',
+                                meta: { title: 'message.menu.echarts.bar' }
+                            },
+                            {
+                                path: 'line',
+                                component: '/views/main/echarts/line.vue',
+                                meta: { title: 'message.menu.echarts.line' }
+                            },
+                            {
+                                path: 'pie',
+                                component: '/views/main/echarts/pie.vue',
+                                meta: { title: 'message.menu.echarts.pie' }
+                            },
+                            {
+                                path: 'radar',
+                                component: '/views/main/echarts/radar.vue',
+                                meta: { title: 'message.menu.echarts.radar' }
+                            },
+                            {
+                                path: 'map',
+                                component: '/views/main/echarts/map.vue',
+                                meta: { title: 'message.menu.echarts.map' }
+                            },
+                        ]
+                    },
+                    {
+                        path: '/systemManage',
+                        component: 'Layout',
+                        redirect: '/systemManage/menu',
+                        meta: { title: 'message.menu.systemManage.name', icon: 'sfont system-xitongzhuangtai' },
+                        alwayShow: true,
+                        children: [
+                            {
+                                path: 'menu',
+                                component: '/views/main/systemManage/menu/index.vue',
+                                meta: { title: 'message.menu.systemManage.menu' }
+                            },
+                            {
+                                path: 'role',
+                                component: '/views/main/systemManage/role/index.vue',
+                                meta: { title: 'message.menu.systemManage.role' }
+                            },
+                            {
+                                path: 'user',
+                                component: '/views/main/systemManage/users/index.vue',
+                                meta: { title: 'message.menu.systemManage.user' }
+                            }
+                        ]
+                    },
+                    {
+                        path: '/print',
+                        component: 'Layout',
+                        redirect: '/print/js',
+                        meta: { title: 'message.menu.print.name', icon: 'sfont system-24gl-printer' },
+                        children: [
+                            {
+                                path: 'js',
+                                component: '/views/main/print/index.vue',
+                                meta: { title: 'message.menu.print.jsPrint', icon: 'sfont system-24gl-printer' }
+                            }
+                        ]
+                    },
+                    {
+                        path: '/system',
+                        component: 'Layout',
+                        redirect: '/404',
+                        hideMenu: true,
+                        meta: { title: 'message.menu.system.name' },
+                        children: [
+                            {
+                                path: '/404',
+                                component: '/views/system/404.vue',
+                                meta: { title: 'message.menu.system.404', hideTabs: true }
+                            },
+                            {
+                                path: '/401',
+                                component: '/views/system/401.vue',
+                                meta: { title: 'message.menu.system.401', hideTabs: true }
+                            },
+                            {
+                                path: '/redirect/:path(.*)',
+                                component: '/views/system/redirect.vue',
+                                meta: { title: 'message.menu.system.redirect', hideTabs: true }
+                            }
+                        ]
+                    },
+                    {
+                        path: '/login',
+                        component: '/views/system/login.vue',
+                        hideMenu: true,
+                        meta: { title: 'message.system.login', hideTabs: true }
+                    },
                 ],
                 msg: ''
             };

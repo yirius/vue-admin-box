@@ -9,17 +9,13 @@
 import { defineComponent } from 'vue'
 import ElementButtonCard from './elementButton.vue'
 import NormalButton from './normalButton.vue'
-import * as Env from '@/utils/admin/env'
-import { changeTitle } from '@/utils/system/title'
-
 export default defineComponent({
   components: {
     ElementButtonCard,
     NormalButton
   },
   setup() {
-    console.log(Env)
-    changeTitle("测试一下");
+
   }
 })
 </script>

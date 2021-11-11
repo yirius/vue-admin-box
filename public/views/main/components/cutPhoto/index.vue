@@ -18,7 +18,6 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
 import Cropper from '@/components/cropper/index.vue'
-
 export default defineComponent({
   components: {
     Cropper

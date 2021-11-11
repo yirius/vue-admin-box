@@ -1,7 +1,7 @@
 // @ts-ignore
-import type { JSON2SheetOpts, WritingOptions, BookType } from '@/components/xlsx';
+import type { JSON2SheetOpts, WritingOptions, BookType } from '@/components/xlsx/index';
 
-export interface ExcelData<T = any> {
+export interface ExcelData<T> {
   header: string[];
   results: T[];
   meta: { sheetName: string };
@@ -11,7 +11,7 @@ export interface ExcelData<T = any> {
 //   beforeUpload: (file: File) => boolean;
 // }
 
-export interface JsonToSheet<T = any> {
+export interface JsonToSheet<T> {
   data: T[];
   header?: T;
   filename?: string;
@@ -19,7 +19,7 @@ export interface JsonToSheet<T = any> {
   write2excelOpts?: WritingOptions;
 }
 
-export interface AoAToSheet<T = any> {
+export interface AoAToSheet<T> {
   data: T[][];
   header?: T[];
   filename?: string;

@@ -25,12 +25,12 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-  article {
-    padding: 0 20px;
-  }
-  article p {
-    text-align: left;
-    line-height: 25px;
-  }
+<style  scoped>
+article {
+  padding: 0 20px;
+}
+article p {
+  text-align: left;
+  line-height: 25px;
+}
 </style>

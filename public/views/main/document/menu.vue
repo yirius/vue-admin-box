@@ -37,21 +37,21 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-  article {
-    padding: 20px 50px;
-    text-align: left;
-  }
-  article p {
-    text-align: left;
-    line-height: 29px;
-    text-indent: 2em;
-    margin-top: 0;
-  }
-  article ul li {
-    margin-bottom: 20px;
-  }
-  article ul li ul {
-    margin-top: 20px;
-  }
+<style  scoped>
+article {
+  padding: 20px 50px;
+  text-align: left;
+}
+article p {
+  text-align: left;
+  line-height: 29px;
+  text-indent: 2em;
+  margin-top: 0;
+}
+article ul li {
+  margin-bottom: 20px;
+}
+article ul li ul {
+  margin-top: 20px;
+}
 </style>

@@ -41,14 +41,14 @@ export default defineComponent({
 </script>
 
 <style scoped>
-  .box-card .card-header{
-    text-align: left;
-  }
-  .box-card .box .item {
-    display: flex;
-    align-items: center;
-  }
-  .box-card .box .item * {
-    margin-right: 20px;
-  }
+.box-card .card-header {
+  text-align: left;
+}
+.box-card .box .item {
+  display: flex;
+  align-items: center;
+}
+.box-card .box .item * {
+  margin-right: 20px;
+}
 </style>

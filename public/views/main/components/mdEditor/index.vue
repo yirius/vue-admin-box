@@ -16,9 +16,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import { VMdEditor, githubTheme, hljs } from '@/components/mdEditor/index.ts'
-
+import { defineComponent, ref } from 'vue';
+import { VMdEditor, githubTheme, hljs } from '@/components/mdEditor/index';
 VMdEditor.use(githubTheme, {
   Hljs: hljs,
 });

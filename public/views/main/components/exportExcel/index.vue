@@ -10,7 +10,7 @@
 
         <el-button
           type="primary"
-          icon="el-icon-bottom"
+          :icon="Download"
           class="export-excel-btn"
           @click="handleExportExcel"
           >{{ $t('message.common.exportExcel') }}</el-button
@@ -24,7 +24,7 @@
         ></el-input>
         <el-button
           type="primary"
-          icon="el-icon-search"
+          :icon="Search"
           class="search-btn"
           @click="getTableData(true)"
           >{{ $t('message.common.search') }}</el-button
@@ -57,13 +57,13 @@
 
 <script>
 import { defineComponent, ref, reactive, isRef, toRaw, unref } from 'vue'
-import Table from '@/components/table/index.vue'
-import { Page } from '@/components/table/type'
-import { getData } from '@/api/table'
-import { ElMessage } from 'element-plus'
-import { aoaToSheetXlsx } from './ExportExcel.js'
-import { useI18n } from 'vue-i18n'
-
+import Table from '@/components/table/index.vue';
+import { Page } from '@/components/table/type';
+import { getData } from '@/api/table';
+import { ElMessage } from 'element-plus';
+import { aoaToSheetXlsx } from './ExportExcel.js';
+import { useI18n } from 'vue-i18n';
+import { Download, Search } from '@element-plus/icons';
 export default defineComponent({
   name: 'crudTable',
   components: {
@@ -72,27 +72,27 @@ export default defineComponent({
   },
   setup() {
     // 存储搜索用的数据
-    const { t } = useI18n()
-    const query = reactive({
+    let { t } = useI18n();
+    let query = reactive({
       input: '',
-    })
-    const fileName = ref('')
+    });
+    let fileName = ref('');
 
-    const page: Page = reactive({
+    let page = reactive({
       index: 1,
       size: 20,
       total: 0,
-    })
-    const loading = ref(true)
-    const tableData = ref([])
-    const chooseData = ref([])
+    });
+    let loading = ref(true);
+    let tableData = ref([]);
+    let chooseData = ref([]);
 
     // 获取表格数据
     // params <init> Boolean ，默认为false，用于判断是否需要初始化分页
-    const getTableData = (init: boolean) => {
-      loading.value = true
+    const getTableData = (init) => {
+      loading.value = true;
       if (init) {
-        page.index = 1
+        page.index = 1;
       }
       let params = {
         page: page.index,
@@ -101,16 +101,16 @@ export default defineComponent({
       }
       getData(params)
         .then((res) => {
-          tableData.value = res.data.list
-          page.total = Number(res.data.pager.total)
+          tableData.value = res.data.list;
+          page.total = Number(res.data.pager.total);
         })
         .catch((error) => {
-          tableData.value = []
-          page.index = 1
-          page.total = 0
+          tableData.value = [];
+          page.index = 1;
+          page.total = 0;
         })
         .finally(() => {
-          loading.value = false
+          loading.value = false;
         })
     }
 
@@ -140,6 +140,8 @@ export default defineComponent({
 
     getTableData(true)
     return {
+      Download,
+      Search,
       query,
       fileName,
       tableData,

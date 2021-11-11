@@ -41,7 +41,8 @@ import Community from './modules/community'
 import System from './modules/system'
 
 // 聚合一下
-const modulesFiles = import.meta.globEager("./modules/*.ts");
+// const componentsFiles = import.meta.globEager("../components/*/*.ts");
+// console.log(componentsFiles);
 
 // 初始化必须要的路由
 let modules: object[] = [
@@ -82,8 +83,13 @@ export function transferMenuToRouter(menus: any[]): RouteRecordRaw[] {
     } else {
       // @ts-ignore
       if(typeof item.component === "string") {
-        const componentPath = item.component;
-        item.component = () => asyncLoadModule(componentPath, loadModuleOptions);
+        let componentPath = item.component;
+        if(item.component.startsWith("@")) {
+          componentPath = componentPath.replace("@", "../");
+          item.component = createNameComponent(() => import(componentPath));
+        } else {
+          item.component = () => asyncLoadModule(componentPath, loadModuleOptions);
+        }
       }
     }
     if(item.children) {

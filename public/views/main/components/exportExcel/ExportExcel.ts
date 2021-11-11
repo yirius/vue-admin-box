@@ -1,14 +1,14 @@
 // @ts-ignore
-import xlsx from '@/components/xlsx';
+import xlsx from '@/components/xlsx/index';
 // @ts-ignore
-import type { WorkBook } from '@/components/xlsx';
-// @ts-ignore
-import type { JsonToSheet, AoAToSheet } from '@/components/xlsx';
+import type { WorkBook } from '@/components/xlsx/index';
+//
+import type { JsonToSheet, AoAToSheet } from './types.js';
 
 const { utils, writeFile } = xlsx;
 
 const DEF_FILE_NAME = 'new-excel.xlsx';
-export function jsonToSheetXlsx<T = any>({
+export function jsonToSheetXlsx<T>({
   data,
   header,
   filename = DEF_FILE_NAME,
@@ -35,7 +35,7 @@ export function jsonToSheetXlsx<T = any>({
   /* at this point, out.xlsb will have been downloaded */
 }
 
-export function aoaToSheetXlsx<T = any>({
+export function aoaToSheetXlsx<T>({
   data,
   header,
   filename = DEF_FILE_NAME,

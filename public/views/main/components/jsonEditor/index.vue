@@ -18,8 +18,7 @@
 <script>
 import { defineComponent, ref, onMounted, watch } from 'vue'
 // load basic codemirror
-import { codeMirror } from '@/components/codeMirror/index.ts';
-
+import { codeMirror } from '@/components/codeMirror/index';
 export default defineComponent({
   setup() {
     let dom = ref(null)

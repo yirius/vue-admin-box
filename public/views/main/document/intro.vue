@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import basicTemplate from '/views/main/dashboard/components/basic-template.vue'
+import basicTemplate from '@/views/main/dashboard/components/basic-template.vue'
 export default defineComponent({
   components: {
     basicTemplate
@@ -44,12 +44,12 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-  article {
-    padding: 20px 50px;
-    text-align: left;
-  }
-  article ol li {
-    line-height: 30px;
-  }
+<style  scoped>
+article {
+  padding: 20px 50px;
+  text-align: left;
+}
+article ol li {
+  line-height: 30px;
+}
 </style>

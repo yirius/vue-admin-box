@@ -5,7 +5,12 @@
       <el-col :span="12" class="el-col-tree-box">
         <h2>目录结构</h2>
         <div class="custom-tree">
-          <el-tree :data="data" :props="defaultProps" :highlight-current="true" @node-click="handleNodeClick">
+          <el-tree
+            :data="data"
+            :props="defaultProps"
+            :highlight-current="true"
+            @node-click="handleNodeClick"
+          >
           <template #default="{ node, data }">
             <div class="custom-tree-node">
               <i :class="data.children ? 'el-icon-files': 'el-icon-document'"></i>
@@ -25,10 +30,9 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
-import { data } from './dir.js';
-
+<script>
+import { defineComponent, ref } from 'vue'
+import { data } from './dir.js'
 export default defineComponent({
   setup() {
     const defaultProps = {
@@ -47,48 +51,49 @@ export default defineComponent({
       handleNodeClick
     }
   }
-});
+})
 </script>
 
-<style scoped>
-  .layout-container {
-    padding: 15px;
-    box-sizing: border-box;
-  }
-  .layout-container .el-row {
-    flex: 1;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    overflow: hidden;
-  }
-  .layout-container .custom-tree {
-    border: 1px solid #eee;
-    padding: 15px;
-    overflow-y: auto;
-    flex: 1;
-  }
-  .layout-container .custom-tree .el-tree {
-    width: 100%;
-  }
-  .layout-container .custom-tree :deep(.el-tree-node__content) {
-    height: 36px;
-  }
-  .layout-container .custom-tree.des p {
-    text-align: left;
-    line-height: 29px;
-    text-indent: 2em;
-    margin-top: 0;
-  }
-  .layout-container .custom-tree-node i {
-    margin-right: 10px;
-  }
-  .layout-container .el-col-tree-box {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  h1 {
-    margin: 0;
-  }
+<style  scoped>
+.layout-container {
+  padding: 15px;
+  box-sizing: border-box;
+}
+.layout-container .el-row {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+}
+.layout-container .custom-tree {
+  border: 1px solid #eee;
+  padding: 15px;
+  overflow-y: auto;
+  flex: 1;
+}
+.layout-container .custom-tree .el-tree {
+  width: 100%;
+}
+.layout-container .custom-tree :deep(.el-tree-node__content) {
+  height: 36px;
+}
+.layout-container .custom-tree.des p {
+  text-align: left;
+  line-height: 29px;
+  text-indent: 2em;
+  margin-top: 0;
+}
+.layout-container .custom-tree-node i {
+  margin-right: 10px;
+}
+.layout-container .el-col-tree-box {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+h1 {
+  margin: 0;
+}
 </style>

@@ -18,7 +18,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import tinymce from '@/components/tinymce/index.vue'
-
 export default defineComponent({
   components: {
     tinymce

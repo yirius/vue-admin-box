@@ -12,6 +12,7 @@ interface ElType extends HTMLElement {
 const directive: Directive = {
   mounted(el: ElType, binding: DirectiveBinding) {
     el.copyData = binding.value
+    // @ts-ignore
     el.addEventListener('click', handleClick)
   },
   updated(el: ElType, binding: DirectiveBinding) {

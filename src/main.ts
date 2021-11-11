@@ -10,6 +10,7 @@ import App from './App.vue'
 import store from './store'
 import router from './router'
 import i18n from './locale'
+
 if (import.meta.env.MODE !== 'development') { // 非开发环境调用百度统计
   baidu()
 }
@@ -19,4 +20,11 @@ app.use(store)
 app.use(router)
 app.use(i18n)
 // app.config.performance = true
+
+// 注册一下指令，否则sfc界面无法使用
+const directivesFiles = import.meta.globEager("./directive/*/*.ts");
+for (var directive in directivesFiles) {
+  app.directive(directive.replace("./directive/", "").replace("/index.ts", ""), directivesFiles[directive].default);
+}
+
 app.mount('#app')

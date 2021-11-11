@@ -8,7 +8,6 @@
 import { defineComponent } from 'vue'
 import Chart from '@/components/charts/index.vue'
 import option from './modules/bar.js'
-
 export default defineComponent({
   components: {
     Chart
