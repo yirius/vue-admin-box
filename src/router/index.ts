@@ -28,21 +28,10 @@ const pathNotMatchRedirect = {
 };
 
 // 引入modules
-import Dashboard from './modules/dashboard'
-import Document from './modules/document'
-import Pages from './modules/pages'
-import Menu from './modules/menu'
-import Component from './modules/component'
-import Directive from './modules/directive'
-import SystemManage from './modules/systemManage'
-import Chart from './modules/chart'
-import Print from './modules/print'
-import Community from './modules/community'
 import System from './modules/system'
 
-// 聚合一下
-// const componentsFiles = import.meta.globEager("../components/*/*.ts");
-// console.log(componentsFiles);
+// 所有的vue文件
+const vuesFiles = import.meta.glob("../**/**/**.vue");
 
 // 初始化必须要的路由
 let modules: object[] = [
@@ -59,18 +48,7 @@ const router = createRouter({
 })
 
 // 登录后动态加入的路由
-let asyncRoutes: RouteRecordRaw[] = [
-  // ...Dashboard,
-  // ...Document,
-  // ...Component,
-  // ...Pages,
-  // ...Menu,
-  // ...Directive,
-  // ...Chart,
-  // ...SystemManage,
-  // ...Print,
-  // ...Community,
-]
+let asyncRoutes: RouteRecordRaw[] = []
 
 /**
  * 转化menu菜单到router路由
@@ -84,11 +62,15 @@ export function transferMenuToRouter(menus: any[]): RouteRecordRaw[] {
       // @ts-ignore
       if(typeof item.component === "string") {
         let componentPath = item.component;
-        if(item.component.startsWith("@")) {
-          componentPath = componentPath.replace("@", "../");
-          item.component = createNameComponent(() => import(componentPath));
+        if(item.component.startsWith("@") || item.component.startsWith("/@")) {
+          componentPath = componentPath.replace("/@/", "../").replace("@/", "../").replace("@", "../");
+          if(vuesFiles[componentPath]) {
+            item.component = createNameComponent(vuesFiles[componentPath]);
+          }
         } else {
-          item.component = () => asyncLoadModule(componentPath, loadModuleOptions);
+          item.component = createNameComponent(() => asyncLoadModule(componentPath, loadModuleOptions).then((data: any) => {
+            return {default: data}
+          }));
         }
       }
     }

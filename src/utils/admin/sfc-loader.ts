@@ -16,6 +16,11 @@ import * as echartsRenderers from 'echarts/renderers';
 import * as echartsCharts from 'echarts/charts';
 import * as echartsComponents from 'echarts/components';
 
+// 文件的组合
+const allFiles = import.meta.glob("../../**/**/**.*");
+// 已经执行过，引入了的
+let importedFiles: Record<string, {[key: string]: any}> = {};
+
 /**
  * 获取模块的相关参数
  */
@@ -70,20 +75,20 @@ export const loadModuleOptions = {
     async handleModule(type: string, source: any, path: string, options: any) {
         if(path.startsWith("@") || path.startsWith("/@")) {
             // 说明是引入系统内文件
-            let realPath = path.replace("/@/", "").replace("@/", "");
-            if(!type && realPath.indexOf(".") == -1) type = ".ts";
-            if(type === ".vue") {
-                // @ts-ignore
-                return (await import(`../../${realPath.replace(".vue", "")}.vue`)).default;
-            } else if(type === ".ts") {
-                // @ts-ignore
-                return (await import(`../../${realPath}.ts`));
+            let realPath: string = path.replace("/@/", "../../").replace("@/", "../../");
+            if(!type && path.indexOf(".") == -1) realPath += ".ts";
+            if(allFiles[realPath]) {
+                if(!importedFiles[realPath]) {
+                    importedFiles[realPath] = await allFiles[realPath]();
+                }
+                if(realPath.indexOf(".vue") >= 0) {
+                    return importedFiles[realPath].default;
+                }
+                return importedFiles[realPath];
             }
+            console.error(realPath);
             //todo  其他的不知明文件，需要未来遇到了再去
             return "";
-        } else if(type === ".ts") {
-            const data = await fetch(path, {}).then((res) => res.text());
-            return eval("function exportDefault() {};" + data.replace("export default", "exportDefault"));
         }
     }
 };

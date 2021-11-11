@@ -55,6 +55,7 @@ var convertData = function (data) {
     }
     return res;
 };
+// @ts-ignore
 echarts.registerMap(nameMap, mapData_js_1["default"]);
 /*获取地图数据*/
 var mapFeatures = echarts.getMap(nameMap).geoJson.features;
