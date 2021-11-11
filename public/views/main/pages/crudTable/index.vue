@@ -48,11 +48,13 @@
 <script>
 import { defineComponent, ref, reactive } from 'vue'
 import Table from '@/components/table/index.vue'
-import { getData, del } from '@/api/table'
+import { getData, del } from '/@/api/table'
 import Layer from './layer.vue'
 import { ElMessage } from 'element-plus'
 import { selectData, radioData } from './enum.js'
 import { Plus, Search, Delete } from '@element-plus/icons'
+import { getEnv } from "/@/config/env";
+
 export default defineComponent({
   name: 'crudTable',
   components: {
@@ -60,6 +62,7 @@ export default defineComponent({
     Layer
   },
   setup() {
+    getEnv()
     // 存储搜索用的数据
     const query = reactive({
       input: ''

@@ -4,6 +4,7 @@ export default {
     login: '登录',
     userName: '用户名',
     password: '密码',
+    vercode: '验证码',
     contentScreen: '内容全屏',
     fullScreen: '全屏',
     fullScreenBack: '退出全屏',

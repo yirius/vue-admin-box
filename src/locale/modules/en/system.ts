@@ -4,6 +4,7 @@ export default {
     login: 'login',
     userName: 'userName',
     password: 'password',
+    vercode: 'verifyCode',
     contentScreen: 'content full screen',
     fullScreen: 'fullscreen',
     fullScreenBack: 'back fullscreen',

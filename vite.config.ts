@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue';
 import { viteMockServe } from 'vite-plugin-mock';
 import { resolve } from 'path';
 import { configHtmlPlugin } from './build/plugins/html';
+import { parseEnv } from "./src/config/env";
 
 const pathResolve = (dir: string): any => {
   return resolve(__dirname, ".", dir)
@@ -16,10 +17,7 @@ const alias: Record<string, string> = {
 export default ({ command, mode }: ConfigEnv): UserConfigExport => {
   const root = process.cwd();
 
-  const env = loadEnv(mode, root);
-
-  // 找到几个参数
-  let VITE_PORT = env.VITE_PORT ? env.VITE_PORT : "3100";
+  const env = parseEnv(loadEnv(mode, root));
 
   // 是否生产
   const isBuild = command === 'build';
@@ -30,12 +28,10 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
       alias
     },
     server: {
-      port: parseInt(VITE_PORT),
+      port: env.VITE_PORT,
       host: true,
       open: true,
-      proxy: { // 代理配置
-        '/dev': 'https://www.fastmock.site/mock/48cab8545e64d93ff9ba66a87ad04f6b/'
-      },
+      proxy: env.VITE_PROXY || {},
     },
     build: {
       rollupOptions: {

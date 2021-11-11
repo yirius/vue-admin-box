@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 // @ts-ignore
 import dotenv from 'dotenv';
+import en from "@/locale/modules/en";
 
 /**
  * Get user root directory

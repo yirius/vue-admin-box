@@ -1,8 +1,8 @@
-import type { Plugin } from 'vite';
+import type {Plugin} from 'vite';
 import html from 'vite-plugin-html';
 // @ts-ignore
 import pkg from "../../package.json";
-import { GLOB_CONFIG_FILE_NAME } from "../constant";
+import {GLOB_CONFIG_FILE_NAME} from "../constant";
 
 export function configHtmlPlugin(env, isBuild: boolean) {
     const { VITE_GLOB_APP_TITLE, VITE_PUBLIC_PATH } = env;
@@ -13,7 +13,7 @@ export function configHtmlPlugin(env, isBuild: boolean) {
         return `${path || '/'}${GLOB_CONFIG_FILE_NAME}?v=${pkg.version}-${new Date().getTime()}`;
     };
 
-    const htmlPlugin: Plugin[] = html({
+    return html({
         minify: isBuild,
         inject: {
             // Inject data into ejs template
@@ -33,5 +33,4 @@ export function configHtmlPlugin(env, isBuild: boolean) {
                 : [],
         },
     });
-    return htmlPlugin;
 }
