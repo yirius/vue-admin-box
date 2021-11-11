@@ -40,8 +40,10 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
     build: {
       rollupOptions: {
         output: {
-          manualChunks: {
-            'echarts': ['echarts']
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              return id.toString().split('node_modules/')[1].split('/')[0].toString();
+            }
           }
         }
       }

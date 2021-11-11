@@ -1,0 +1,49 @@
+<template>
+  <div class="layout-container">
+    <div :id="id" class="map"></div>
+  </div>
+</template>
+
+<script>
+import { defineComponent, ref, onMounted } from 'vue'
+
+export default defineComponent({
+  setup() {
+    let map = null;
+    const id = 'map-' + (new Date()).getTime();
+    const key = "2a85714ee5a14f879ba7ae94551f5c6b";
+    function setMap() {
+      map = new AMap.Map(id, {
+        resizeEnable: true
+      })
+    }
+    function loadApi() {
+      window.onLoad = () => {
+        setMap()
+      }
+      const url = `https://webapi.amap.com/maps?v=1.4.15&key=${key}&callback=onLoad`;
+      const jsapi = document.createElement('script');
+      jsapi.charset = 'utf-8'
+      jsapi.src = url
+      document.head.appendChild(jsapi)
+    }
+    onMounted(() => {
+      if (window.onLoad) {
+        setMap()
+      } else {
+        loadApi()
+      }
+    })
+    return {
+      id
+    }
+  }
+})
+</script>
+
+<style scoped>
+  .map{
+    width: 100%;
+    height: 100%;
+  }
+</style>
