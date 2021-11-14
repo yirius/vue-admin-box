@@ -1,11 +1,7 @@
-import request from '@/utils/system/request'
+import {postRequest} from "@/api/request";
+import login from "@/config/login";
 
 // 获取用户信息Api
 export function getMenus(data: object) {
-  return request({
-    url: '/menus',
-    method: 'post',
-    baseURL: '/mock',
-    data
-  })
+  return postRequest(login.menuUrl, data)
 }

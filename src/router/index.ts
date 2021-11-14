@@ -5,26 +5,28 @@
  */
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import store from '@/store'
-import i18n from '@/locale'
 import NProgress from '@/utils/system/nprogress'
 import { changeTitle } from '@/utils/system/title'
 import { getMenus } from '@/api/menu'
+import { getLang } from '@/api/lang'
 import { asyncLoadModule, loadModuleOptions } from '@/utils/admin/sfc-loader'
 
 NProgress.configure({ showSpinner: false })
 
+// 在路由之前，加入语言包
+await getLang({});
+
 // 动态路由相关引入数据
 import Layout from '@/layout/index.vue'
-import MenuBox from '@/components/menu/index.vue'
 import { createNameComponent } from './createNode'
 
 // 定义一下找不到的重定向
 const pathNotMatchRedirect = {
   // 找不到路由重定向到404页面
   path: "/:pathMatch(.*)",
-      component: Layout,
-    redirect: "/404",
-    hideMenu: true
+  component: Layout,
+  redirect: "/404",
+  hideMenu: true
 };
 
 // 引入modules
@@ -33,18 +35,15 @@ import System from './modules/system'
 // 所有的vue文件
 const vuesFiles = import.meta.glob("../**/**/**.vue");
 
-// 初始化必须要的路由
+// 初始化必须要的路由, 系统内部必要的规则【404、login等】
 let modules: object[] = [
   ...System
 ]
 
-const { t } = i18n.global
-
-const routes: any = modules
-
+// 创建路由规则
 const router = createRouter({
   history: createWebHashHistory(),
-  routes
+  routes: modules
 })
 
 // 登录后动态加入的路由
@@ -82,48 +81,28 @@ export function transferMenuToRouter(menus: any[]): RouteRecordRaw[] {
   return menus;
 }
 
-// 先循环，加入既定默认
-asyncRoutes.forEach(item => {
-  modules.push(item)
-  router.addRoute(item)
-})
-
-// 动态路由的权限新增，供登录后调用
+// 动态路由的权限新增，供登录后调用, 同时，如果登录了，但刷新了界面，页自动加载
 export async function addRoutes() {
-  // eachData(data, 0) // 匹配本地路由，产生一棵新树
-  // data.forEach(item => { // 添加到路由表里面去
-  //   modules.push(item)
-  //   router.addRoute(item)
-  // })
+
+  // 如果存在写死的，登录后需要加入的，也加入下
+  if(asyncRoutes.length > 0) {
+    asyncRoutes.forEach(item => {
+      modules.push(item);
+      router.addRoute(item);
+    })
+  }
+
   // 与后端交互的逻辑处理，处理完后异步添加至页面
   const data = await getMenus({});
   if(data.data) {
     transferMenuToRouter(data.data).forEach(item => {
-      modules.push(item)
-      router.addRoute(item)
+      modules.push(item);
+      router.addRoute(item);
     })
   }
-  router.addRoute(pathNotMatchRedirect);
-}
 
-// 重置匹配所有路由的解决方案，todo
-function eachData(data: any, type: number) {
-  // @ts-ignore
-  data.forEach(d => {
-    if (d.children && d.children.length > 0) {
-      if (type === 0) {
-        d.component = Layout
-      } else {
-        d.component = createNameComponent(MenuBox)
-      }
-      eachData(d.children, type + 1)
-    } else {
-      /* 组件匹配暂时写死，todo项 */
-      // d.component = createNameComponent(() => import('@/views/main/pages/crudTable/index.vue'))
-      d.component = d.component
-    }
-  })
-  console.log(data)
+  // 补充最终数据，重定向到404
+  router.addRoute(pathNotMatchRedirect);
 }
 
 let whiteList = ['/login'], addRoutesOver = false;
@@ -163,7 +142,7 @@ router.afterEach((to, _from) => {
 });
 
 export {
-  modules
+  modules, asyncRoutes
 }
 
 export default router

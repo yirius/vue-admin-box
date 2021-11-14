@@ -1,6 +1,7 @@
+// @ts-ignore
 import useClipboard from 'vue-clipboard3';
 import { ElMessage } from 'element-plus';
-import { i18n } from '/@/i18n';
+import i18n from '@/locale';
 
 const { t } = i18n.global;
 const { toClipboard } = useClipboard();

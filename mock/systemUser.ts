@@ -7,7 +7,7 @@ export default [
     response: ({ body }) => {
       const { page, pageSize } = body
       return {
-        code: 200,
+        code: 1,
         data: {
           [`list|${pageSize}`]: [{
             'id|+1': 0,
@@ -32,7 +32,7 @@ export default [
     method: 'post',
     response: ({ body }) => {
       return {
-        code: 200,
+        code: 1,
         data: {},
         msg: ''
       };
@@ -43,7 +43,7 @@ export default [
     method: 'post',
     response: ({ body }) => {
       return {
-        code: 200,
+        code: 1,
         data: {},
         msg: ''
       };
@@ -54,7 +54,7 @@ export default [
     method: 'post',
     response: ({ body }) => {
       return {
-        code: 200,
+        code: 1,
         data: {},
         msg: ''
       };
@@ -65,7 +65,7 @@ export default [
     method: 'post',
     response: ({ body }) => {
       return {
-        code: 200,
+        code: 1,
         data: {},
         msg: ''
       };

@@ -14,13 +14,13 @@
         <div class="function-list-item"><Word /></div>
         <div class="function-list-item"><SizeChange /></div>
         <div class="function-list-item hidden-sm-and-down"><Theme /></div>
-        <div class="function-list-item hidden-sm-and-down"><Github /></div>
+<!--        <div class="function-list-item hidden-sm-and-down"><Github /></div>-->
       </div>
       <!-- 用户信息 -->
       <div class="user-info">
         <el-dropdown>
           <span class="el-dropdown-link">
-            {{ $t('message.system.user') }}
+            {{ store.state.user.info.username }}
             <i class="sfont system-xiala"></i>
           </span>
           <template #dropdown>
@@ -80,6 +80,7 @@ export default defineComponent({
       layer.show = true
     }
     return {
+      store,
       isCollapse,
       layer,
       opendStateChange,

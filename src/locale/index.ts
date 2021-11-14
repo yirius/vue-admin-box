@@ -2,7 +2,7 @@
 import { createI18n, LocaleMessages, VueMessageType } from 'vue-i18n'
 import store from '@/store'
 
-const files= import.meta.globEager('./modules/*.ts')
+const files = import.meta.globEager('./modules/*.ts')
 
 let messages: LocaleMessages<VueMessageType> = {}
 Object.keys(files).forEach((c: string) => {

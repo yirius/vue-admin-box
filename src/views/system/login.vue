@@ -4,13 +4,13 @@
       <div class="login-content-left">
         <img src="@/assets/login/left.jpg"/>
         <div class="login-content-left-mask">
-          <div>{{ env.VITE_GLOB_APP_TITLE }}</div>
-          <div>{{ env.VITE_GLOB_APP_SUB_TITLE || '' }}</div>
+          <div>{{ $t(systemTitle) }}</div>
+          <div>{{ $t('message.system.subTitle') }}</div>
         </div>
       </div>
 
       <div class="box-inner">
-        <h1>欢迎登录</h1>
+        <h1>{{ $t('message.system.welcome') }}</h1>
         <el-form class="form">
           <el-input
               size="large"
@@ -41,7 +41,7 @@
             </template>
           </el-input>
 
-          <el-form-item label="" v-if="env.VITE_GLOB_CAPTCHA_URL">
+          <el-form-item label="" v-if="login.captchaUrl">
             <div style="display: flex">
               <el-input
                   size="large"
@@ -51,7 +51,7 @@
                   name="vercode"
                   maxlength="10"
               ></el-input>
-              <img :src="env.VITE_GLOB_CAPTCHA_URL + captchaSuffix" @click="refreshCode" style="height: 40px" alt=""/>
+              <img :src="login.captchaUrl + captchaSuffix" @click="refreshCode" style="height: 40px" alt=""/>
               <el-button @click="refreshCode" type='text' class="hidden-xs-only" style="height: 40px">看不清，换一张</el-button>
             </div>
           </el-form-item>
@@ -73,10 +73,10 @@ import {defineComponent, ref, reactive} from 'vue'
 import {useStore} from 'vuex'
 import {useRouter, useRoute} from 'vue-router'
 import type {RouteLocationRaw} from 'vue-router'
-import {addRoutes} from '@/router'
 import {ElMessage} from 'element-plus'
 import selectLang from '@/layout/Header/functionList/word.vue'
-import {getEnv} from "@/config/env";
+import {systemTitle} from "@/config";
+import login from "@/config/login";
 
 export default defineComponent({
   components: {
@@ -113,6 +113,13 @@ export default defineComponent({
           })
           return;
         }
+        if (form.vercode === '') {
+          ElMessage.warning({
+            message: '验证码不能为空',
+            type: 'warning'
+          })
+          return;
+        }
         resolve(true)
       })
     }
@@ -120,7 +127,7 @@ export default defineComponent({
       checkForm().then(() => {
         form.loading = true
         let params = {
-          name: form.name,
+          username: form.name,
           password: form.password,
           vercode: form.vercode
         }
@@ -131,7 +138,8 @@ export default defineComponent({
             showClose: true,
             duration: 1000
           })
-          await addRoutes()
+          // 进行了修改，所以这里不需要加载路由了
+          // await addRoutes()
           await router.push(route.query.redirect as RouteLocationRaw || '/')
         }).finally(() => {
           form.loading = false
@@ -140,14 +148,15 @@ export default defineComponent({
     }
 
     // 获取env数据，刷新验证码
-    const env = getEnv(), captchaSuffix = ref('');
+    const captchaSuffix = ref('');
     const refreshCode = () => {
-      captchaSuffix.value = (env.VITE_GLOB_CAPTCHA_URL.indexOf("?") >= 0 ? "&__v=" : "?__v=") + new Date().getTime();
+      captchaSuffix.value = (login.captchaUrl.indexOf("?") >= 0 ? "&__v=" : "?__v=") + new Date().getTime();
     }
     refreshCode();
 
     return {
-      env, captchaSuffix,
+      login, captchaSuffix,
+      systemTitle,
       form,
       passwordType,
       passwordTypeChange,
@@ -162,7 +171,7 @@ export default defineComponent({
   position: relative;
   width: 100vw;
   height: 100vh;
-  background: #fff url('./src/assets/login/bg.png') no-repeat center;
+  background: #fff url('@/assets/login/bg.png') no-repeat center;
   overflow: hidden;
   background-size: cover;
   cursor: pointer;

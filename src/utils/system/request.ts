@@ -1,61 +1,82 @@
 import axios , { AxiosError, AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios'
 import store from '@/store'
 import { ElMessage } from 'element-plus'
-const baseURL: any = import.meta.env.VITE_BASE_URL
+import requestConfig from "@/config/request";
+// @ts-ignore
+import qs from "qs";
 
 const service: AxiosInstance = axios.create({
-  baseURL: baseURL,
-  timeout: 5000
+  baseURL: requestConfig.baseUrl,
+  timeout: requestConfig.timeout
 })
 
 // 请求前的统一处理
-service.interceptors.request.use(
-  (config: AxiosRequestConfig) => {
+service.interceptors.request.use((config: AxiosRequestConfig) => {
+    const headers = config.headers || { 'Content-Type': 'application/x-www-form-urlencoded' };
+
     // JWT鉴权处理
     if (store.getters['user/token']) {
-      config.headers['token'] = store.state.user.token
+        headers[requestConfig.tokenName] = store.state.user.token
     }
+
+    // 重置header
+    config.headers = headers;
+
+    // 如果是www-x-form-urlencoded，需要转化一下参数
+    const contentType = headers?.['Content-Type'] || headers?.['content-type'];
+    if(contentType.indexOf("form-urlencoded") >= 0) {
+        if(Reflect.has(config, 'data') && config.method?.toUpperCase() === "GET") {
+            const concatChar = config.url?.indexOf("?") >= 0 ? "&" : "?";
+            config.url = config.url + concatChar + qs.stringify(config.data, { arrayFormat: 'brackets' });
+            config.data = null;
+        } else {
+            config.data = qs.stringify(config.data, { arrayFormat: 'brackets' });
+        }
+    }
+
     return config
-  },
-  (error: AxiosError) => {
+  }, (error: AxiosError) => {
     console.log(error) // for debug
     return Promise.reject(error)
   }
 )
 
+// 请求后的统一处理
 service.interceptors.response.use(
   (response: AxiosResponse) => {
-    const res = response.data
-    if (res.code === 200) {
-      return res
-    } else {
-      showError(res)
-      return Promise.reject(res)
-    }
-  },
-  (error: AxiosError)=> {
-    console.log(error) // for debug
-    const badMessage: any = error.message || error
-    const code = parseInt(badMessage.toString().replace('Error: Request failed with status code ', ''))
-    showError({ code, message: badMessage })
-    return Promise.reject(error)
+      const { msg: msgName, code: codeName, data: dataName } = requestConfig.fieldName;
+      const { success: successCode, expired: expiredCode } = requestConfig.codeStatus;
+      const resultData = response.data;
+
+      if(codeName in resultData) {
+          if(parseInt(resultData[codeName]) == parseInt(successCode)) {
+              return resultData;
+          } else if(parseInt(resultData[codeName]) == parseInt(expiredCode)) {
+              // token过期，清除本地数据，并跳转至登录页面
+              store.dispatch('user/loginOut').then(r => r)
+          }
+      }
+
+      // 如果不存在code，那就仍会错误
+      showError(resultData[msgName]);
+      return Promise.reject(response)
+  }, (error: AxiosError)=> {
+      const { msg: msgName } = requestConfig.fieldName;
+      const resultData = error.response?.data;
+
+      // 如果不存在code，那就仍会错误
+      showError(resultData[msgName]);
+      return Promise.reject(error)
   }
 )
 
 // 错误处理
-function showError(error: any) {
-  // token过期，清除本地数据，并跳转至登录页面
-  if (error.code === 403) {
-    // to re-login
-    store.dispatch('user/loginOut')
-  } else {
+function showError(msg: string) {
     ElMessage({
-      message: error.msg || error.message || '服务异常',
-      type: 'error',
-      duration: 3 * 1000
+        message: msg || '服务异常',
+        type: 'error',
+        duration: 3 * 1000
     })
-  }
-  
 }
 
 export default service

@@ -1,14 +1,20 @@
 import { getConfigFileName } from '../../build/utils';
 
+let envData: ViteEnv;
+
 /**
  * 获取到环境参数
  */
 export function getEnv() {
-    const envName = getConfigFileName(import.meta.env);
+    if(envData) {
+        return envData;
+    }
 
+    const envName = getConfigFileName(import.meta.env);
     const env: {[key: string]: string} = (import.meta.env.DEV ? import.meta.env : window[envName as any]) as any;
 
-    return parseEnv(env);
+    envData = parseEnv(env);
+    return envData;
 }
 
 // 定义接口类型声明
@@ -18,12 +24,25 @@ export interface ViteEnv {
     VITE_PROXY: any;
     VITE_PUBLIC_PATH: string;
     // 所有打包至_app.config.js中的
-    VITE_GLOB_APP_TITLE: string;// 网站名
-    VITE_GLOB_APP_SUB_TITLE: string;// 登录时候显示的subtitle
     VITE_GLOB_APP_SHORT_NAME: string;// 英文名称
     VITE_GLOB_CAPTCHA_URL: string;// 验证码地址
+
+    VITE_GLOB_MENU_URL: string;// 登录相关-菜单地址
+    VITE_GLOB_LOGIN_URL: string;// 登录相关-地址
+    VITE_GLOB_LOGIN_LANG: string;// 登录相关-登录之后加载的基础语言包
+    VITE_GLOB_LOGIN_INFO: string;// 登录相关-获取用户信息
+    VITE_GLOB_LOGOUT_URL: string;// 登录相关-用户推出登录
+    VITE_GLOB_LOGIN_PWD: string;// 登录相关-修改密码
+
+    VITE_GLOB_REQUEST_BASE: string;// 请求相关-基础路径
+    VITE_GLOB_REQUEST_TIMEOUT: number;// 请求相关-超时时间
+    VITE_GLOB_REQUEST_TOKEN_NAME: string;// 请求相关-Token对应名称
+    VITE_GLOB_REQUEST_FIELD_NAME: {[key: string]: any };// 请求相关-msg、code、data对应名称
+    VITE_GLOB_REQUEST_STATUS: {[key: string]: any };// 请求相关-code对应的状态
+    VITE_GLOB_REQUEST_HEADERS: {[key: string]: any };// 请求相关-code对应的状态
+
     // 预留出来的，如果开发人员需要新增某一个默认参数，可以直接改
-    [key: string]: string|number|boolean;
+    [key: string]: string|number|boolean|{[key: string]: any };
 }
 
 /**

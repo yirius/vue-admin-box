@@ -6,7 +6,7 @@ export default [
     method: 'post',
     response: ({ body }) => {
       return {
-        code: 200,
+        code: 1,
         data: {
           list: [
             {

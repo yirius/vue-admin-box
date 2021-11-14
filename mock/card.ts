@@ -7,7 +7,7 @@ export default [
     response: ({ body }) => {
       const { page, pageSize } = body
       return {
-        code: 200,
+        code: 1,
         data: {
           [`list|${pageSize}`]: [{
             'id|+1': 0,

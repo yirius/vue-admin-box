@@ -1,13 +1,13 @@
 import { MockMethod } from 'vite-plugin-mock'
 const users = [
   { name: 'admin', password: '123456', token: 'admin', info: {
-    name: '系统管理员'
+    username: '系统管理员'
   }},
   { name: 'editor', password: '123456', token: 'editor', info: {
-    name: '编辑人员'
+      username: '编辑人员'
   }},
   { name: 'test', password: '123456', token: 'test', info: {
-    name: '测试人员'
+      username: '测试人员'
   }},
 ]
 export default [
@@ -20,14 +20,16 @@ export default [
       })
       if (user) {
         return {
-          code: 200,
+          code: 1,
           data: {
-            token: user.token,
+            id: 1,
+            username: "231",
+            'Access-Token': user.token,
           },
         };
       } else {
         return {
-          code: 401,
+          code: 0,
           data: {},
           msg: '用户名或密码错误'
         };
@@ -45,14 +47,12 @@ export default [
       }).info
       if (info) {
         return {
-          code: 200,
-          data: {
-            info: info
-          },
+          code: 1,
+          data: info,
         };
       } else {
         return {
-          code: 403,
+          code: 0,
           data: {},
           msg: '无访问权限'
         };
@@ -65,7 +65,7 @@ export default [
     method: 'post',
     response: () => {
       return {
-        code: 200,
+        code: 1,
         data: {},
         msg: 'success'
       };
@@ -76,7 +76,7 @@ export default [
     method: 'post',
     response: () => {
       return {
-        code: 200,
+        code: 1,
         data: {},
         msg: 'success'
       };
