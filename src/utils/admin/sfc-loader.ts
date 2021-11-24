@@ -15,6 +15,8 @@ import * as echartsCore from 'echarts/core';
 import * as echartsRenderers from 'echarts/renderers';
 import * as echartsCharts from 'echarts/charts';
 import * as echartsComponents from 'echarts/components';
+import store from "@/store";
+import requestConfig from "@/config/request";
 
 // 文件的组合
 const allFiles = import.meta.glob("../../**/**/**.*");
@@ -47,10 +49,15 @@ export const loadModuleOptions = {
         if(url.startsWith("@") || url.startsWith("/@")) {
             return "";
         } else {
-            return fetch(url, {
-                headers: {
+            let headers = {};
+            // JWT鉴权处理
+            if (store.getters['user/token']) {
+                // @ts-ignore
+                headers[requestConfig.tokenName] = store.state.user.token
+            }
 
-                },
+            return fetch(url, {
+                headers: headers,
             }).then((res) => res.text());
         }
     },

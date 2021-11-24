@@ -12,7 +12,6 @@ interface ElType extends HTMLDivElement {
 const drag: Directive = {
   mounted(el: ElType) {
     const dialog = el.querySelector('.el-dialog') as HTMLElement
-    console.log(dialog)
     const header = el.querySelector('.el-dialog__header') as HTMLElement
     const dialogMask = el.querySelector('.el-overlay') as HTMLElement
     dialogMask.style.cssText += "overflow: hidden;"
@@ -76,6 +75,7 @@ const drag: Directive = {
         width: document.body.clientWidth,
         height: document.body.clientHeight
       }
+      // @ts-ignore
       data.dialog = dialog.getBoundingClientRect()
       data.dialog.marginTop = window.getComputedStyle(dialog).marginTop
       data.mouse = {

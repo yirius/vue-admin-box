@@ -14,7 +14,7 @@ import { asyncLoadModule, loadModuleOptions } from '@/utils/admin/sfc-loader'
 NProgress.configure({ showSpinner: false })
 
 // 在路由之前，加入语言包
-await getLang({});
+getLang({});
 
 // 动态路由相关引入数据
 import Layout from '@/layout/index.vue'
@@ -40,10 +40,11 @@ let modules: object[] = [
   ...System
 ]
 
+const routes: RouteRecordRaw[] = modules as any as RouteRecordRaw[];
 // 创建路由规则
 const router = createRouter({
   history: createWebHashHistory(),
-  routes: modules
+  routes
 })
 
 // 登录后动态加入的路由

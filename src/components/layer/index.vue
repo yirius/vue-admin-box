@@ -5,6 +5,7 @@
       v-model="layer.show"
       :title="layer.title"
       :width="layer.width"
+      custom-class="componentSmallScreenShow"
       center
     >
       <slot></slot>
@@ -70,6 +71,15 @@ export default defineComponent({
 })
 </script>
 
+
+<style lang="scss">
+@media screen and (max-width: 768px) {
+  .componentSmallScreenShow {
+    width: 100% !important;
+  }
+}
+</style>
+
 <style lang="scss" scoped>
-  
+
 </style>

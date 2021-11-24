@@ -38,7 +38,7 @@ const state = () => ({
   lang: '', // 默认采用的国际化方案,初次进入，采用浏览器当前设置的语言，默认采用中文
   theme: {
     state: {
-      style: 'default',
+      style: 'light',
       primaryColor: '#409eff',
       menuType: 'side'
     }

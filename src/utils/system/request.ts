@@ -4,6 +4,7 @@ import { ElMessage } from 'element-plus'
 import requestConfig from "@/config/request";
 // @ts-ignore
 import qs from "qs";
+import {I18n} from "vue-i18n";
 
 const service: AxiosInstance = axios.create({
   baseURL: requestConfig.baseUrl,
@@ -26,6 +27,7 @@ service.interceptors.request.use((config: AxiosRequestConfig) => {
     const contentType = headers?.['Content-Type'] || headers?.['content-type'];
     if(contentType.indexOf("form-urlencoded") >= 0) {
         if(Reflect.has(config, 'data') && config.method?.toUpperCase() === "GET") {
+            // @ts-ignore
             const concatChar = config.url?.indexOf("?") >= 0 ? "&" : "?";
             config.url = config.url + concatChar + qs.stringify(config.data, { arrayFormat: 'brackets' });
             config.data = null;
@@ -70,10 +72,28 @@ service.interceptors.response.use(
   }
 )
 
+let localMsg: any = null;
+
 // 错误处理
 function showError(msg: string) {
+    if(msg.indexOf("message.")>=0) {
+        let msgArr = msg.split("|");
+        if(localMsg == null) {
+            import("@/locale").then(data => {
+                localMsg = data.default;
+                showElMessage(localMsg.global.t(msgArr[0], msgArr[1] ? JSON.parse(msgArr[1]) : {}))
+            })
+        } else {
+            showElMessage(localMsg.global.t(msgArr[0], msgArr[1] ? JSON.parse(msgArr[1]) : {}))
+        }
+    } else {
+        showElMessage(msg);
+    }
+}
+
+function showElMessage(showMessage: string) {
     ElMessage({
-        message: msg || '服务异常',
+        message: showMessage || '服务异常',
         type: 'error',
         duration: 3 * 1000
     })

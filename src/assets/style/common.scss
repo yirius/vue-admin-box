@@ -62,6 +62,9 @@ a {
   text-align: center;
 }
 
+/** 重置一下select样式，方便看 **/
+.el-select { width: 100% }
+
 /** 用于提示信息 **/
 .my-tip {
   background-color: #f1f1f1;

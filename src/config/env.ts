@@ -41,6 +41,7 @@ export interface ViteEnv {
     VITE_GLOB_REQUEST_STATUS: {[key: string]: any };// 请求相关-code对应的状态
     VITE_GLOB_REQUEST_HEADERS: {[key: string]: any };// 请求相关-code对应的状态
 
+    VITE_GLOB_STATISTICS: string;// 统计代码-对应统计地址
     // 预留出来的，如果开发人员需要新增某一个默认参数，可以直接改
     [key: string]: string|number|boolean|{[key: string]: any };
 }

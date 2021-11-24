@@ -77,6 +77,7 @@ import {ElMessage} from 'element-plus'
 import selectLang from '@/layout/Header/functionList/word.vue'
 import {systemTitle} from "@/config";
 import login from "@/config/login";
+import i18n from "@/locale";
 
 export default defineComponent({
   components: {
@@ -86,6 +87,7 @@ export default defineComponent({
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
+    const { t } = i18n.global;
     const form = reactive({
       name: '',
       password: '',
@@ -101,21 +103,21 @@ export default defineComponent({
       return new Promise((resolve, reject) => {
         if (form.name === '') {
           ElMessage.warning({
-            message: '用户名不能为空',
+            message: t("message.thinker.admin.emptyUsername"),
             type: 'warning'
           });
           return;
         }
         if (form.password === '') {
           ElMessage.warning({
-            message: '密码不能为空',
+            message: t("message.thinker.admin.emptyPassword"),
             type: 'warning'
           })
           return;
         }
         if (form.vercode === '') {
           ElMessage.warning({
-            message: '验证码不能为空',
+            message: t("message.thinker.admin.emptyVercode"),
             type: 'warning'
           })
           return;
@@ -133,7 +135,7 @@ export default defineComponent({
         }
         store.dispatch('user/login', params).then(async () => {
           ElMessage.success({
-            message: '登录成功',
+            message: t("message.thinker.admin.loginSuccess"),
             type: 'success',
             showClose: true,
             duration: 1000
@@ -141,6 +143,8 @@ export default defineComponent({
           // 进行了修改，所以这里不需要加载路由了
           // await addRoutes()
           await router.push(route.query.redirect as RouteLocationRaw || '/')
+        }).catch(err => {
+          refreshCode();
         }).finally(() => {
           form.loading = false
         })
