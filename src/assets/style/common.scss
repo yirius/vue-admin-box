@@ -63,7 +63,7 @@ a {
 }
 
 /** 重置一下select样式，方便看 **/
-.el-select { width: 100% }
+.el-select,.el-input,.el-input-number,.el-cascader { width: 100% !important; }
 
 /** 用于提示信息 **/
 .my-tip {
