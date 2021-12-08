@@ -3,6 +3,7 @@ import Persistent from './plugins/persistent'
 import {userState} from "@/store/modules/user";
 import {keepAliveState} from "@/store/modules/keepAlive";
 import {appState} from "@/store/modules/app";
+import login from "@/config/login";
 const debug = import.meta.env.MODE !== 'production'
 const files= import.meta.globEager('./modules/*.ts')
 
@@ -24,7 +25,7 @@ Object.keys(files).forEach((c: string) => {
 // session代表存储在sessionStorage里面，进行临时存储
 // 都接收Modules的文件名数组，如：['app', 'keepAlive', 'user']
 // 用户相关的数据建议直接存储在local里面，session里面会导致打开新窗口时获取不到token值，因为session只针对当前会话
-const persistent = Persistent({ key: 'vuex', modules, modulesKeys: {
+const persistent = Persistent({ key: login.vuexPrevfix + 'vuex', modules, modulesKeys: {
   local: Object.keys(modules),
   session: []
 } })

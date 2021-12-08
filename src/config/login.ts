@@ -16,4 +16,6 @@ export default {
     logoutUrl: env.VITE_GLOB_LOGOUT_URL || "",
     // 登录相关-登录之后加载的基础语言包
     changePwd: env.VITE_GLOB_LOGIN_PWD || "",
+    // 设置缓存相关，读取vuex本地缓存的前缀
+    vuexPrevfix: env.VITE_GLOB_VUEX_PREVFIX || ""
 }

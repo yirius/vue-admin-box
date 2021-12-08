@@ -33,6 +33,7 @@ export interface ViteEnv {
     VITE_GLOB_LOGIN_INFO: string;// 登录相关-获取用户信息
     VITE_GLOB_LOGOUT_URL: string;// 登录相关-用户推出登录
     VITE_GLOB_LOGIN_PWD: string;// 登录相关-修改密码
+    VITE_GLOB_VUEX_PREVFIX: string;// 设置缓存相关，读取vuex本地缓存的前缀
 
     VITE_GLOB_REQUEST_BASE: string;// 请求相关-基础路径
     VITE_GLOB_REQUEST_TIMEOUT: number;// 请求相关-超时时间
