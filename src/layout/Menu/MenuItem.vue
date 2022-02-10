@@ -1,5 +1,5 @@
 <template>
-  <template v-if="!menu.hideMenu">
+  <template v-if="!menu.meta.hideMenu&&!menu.hideMenu">
     <el-sub-menu v-if="showMenuType === 2" :index="pathResolve" :show-timeout="0" :hide-timeout="0">
       <template #title>
         <el-icon v-if="menu.meta.icon">

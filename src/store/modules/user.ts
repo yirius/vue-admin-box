@@ -1,6 +1,7 @@
 import {loginApi, getInfoApi, loginOutApi} from '@/api/user'
 import {ActionContext} from 'vuex'
 import request from "@/config/request";
+import login from "@/config/login";
 
 export interface userState {
     token: string,
@@ -64,9 +65,9 @@ const actions = {
 
             })
             .finally(() => {
-                localStorage.removeItem('tabs')
-                localStorage.removeItem('vuex')
-                sessionStorage.removeItem('vuex')
+                localStorage.removeItem(login.vuexPrevfix + 'tabs')
+                localStorage.removeItem(login.vuexPrevfix + 'vuex')
+                sessionStorage.removeItem(login.vuexPrevfix + 'vuex')
                 location.reload()
             })
     }

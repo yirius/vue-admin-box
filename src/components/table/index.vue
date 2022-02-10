@@ -98,6 +98,7 @@ export default defineComponent({
     justify-content: center;
     align-items: flex-start;
     height: 100%;
+    min-height: 400px;
     .system-table {
       flex: 1;
       height: 100%;

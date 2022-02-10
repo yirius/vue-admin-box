@@ -1,9 +1,11 @@
+import login from "@/config/login";
+
 const tabsHook = {
   setItem: function(arr: object[]) {
-    localStorage.setItem('tabs', JSON.stringify(arr))
+    localStorage.setItem(login.vuexPrevfix + 'tabs', JSON.stringify(arr))
   },
   getItem: function() {
-    return JSON.parse(localStorage.getItem('tabs') || '[]')
+    return JSON.parse(localStorage.getItem(login.vuexPrevfix + 'tabs') || '[]')
   }
 }
 export default tabsHook
