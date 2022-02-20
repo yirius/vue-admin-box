@@ -15,6 +15,7 @@ export default {
     loginOut: 'login out',
     user: 'admin',
     size: {
+      large: 'large',
       default: 'default',
       medium: 'medium',
       small: 'small',

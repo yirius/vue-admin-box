@@ -1,0 +1,258 @@
+/**
+ * @Author: Yirius
+ * @desc: 补充css，结合colorui
+ */
+
+.heightAll {
+	height: 100%;
+}
+.widthAll {
+	width: 100%;
+}
+
+// 定义方框大小
+@for $i from 0 through 200 {
+	@if $i % 5 == 0 {
+		.rectangle-#{$i} {
+			width: $i + px;
+			height: $i + px;
+			overflow: hidden;
+		}
+		.width-#{$i} {
+			width: $i + px;
+		}
+		.height-#{$i} {
+			height: $i + px;
+		}
+	}
+}
+
+/* ==================
+          边框
+ ==================== */
+
+/* -- 实线 -- */
+.solid, .solid-top, .solid-right, .solid-bottom, .solid-left,
+.solids, .solids-top, .solids-right, .solids-bottom, .solids-left,
+.dashed, .dashed-top, .dashed-right, .dashed-bottom, .dashed-left {
+	position: relative;
+}
+
+.solid::after, .solid-top::after, .solid-right::after, .solid-bottom::after, .solid-left::after,
+.solids::after, .solids-top::after, .solids-right::after, .solids-bottom::after, .solids-left::after,
+.dashed::after, .dashed-top::after, .dashed-right::after, .dashed-bottom::after, .dashed-left::after {
+	content: " ";
+	width: 200%;
+	height: 200%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	border-radius: inherit;
+	transform: scale(0.5);
+	transform-origin: 0 0;
+	pointer-events: none;
+	box-sizing: border-box;
+}
+
+$borderCases:"","-top","-right","-bottom","-left";
+
+@each $border in $borderCases {
+	/* -- 细实线 -- */
+	.solid#{$border}::after {
+		border#{$border}: 1px solid rgba(0, 0, 0, 0.1);
+	}
+
+	/* -- 粗实线 -- */
+	.solids#{$border}::after {
+		border#{$border}: 4px solid #eeeeee;
+	}
+
+	/* -- 虚线 -- */
+	.dashed#{$border}::after {
+		border#{$border}: 1px dashed #ddd;
+	}
+}
+
+/* -- 阴影 -- */
+
+.shadow[class*='white'] {
+	--ShadowSize: 0 1px 6px;
+}
+
+.shadow-lg {
+	--ShadowSize: 0px 40px 100px 0px;
+}
+
+.shadow-warp {
+	position: relative;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-warp:before,
+.shadow-warp:after {
+	position: absolute;
+	content: "";
+	top: 20px;
+	bottom: 30px;
+	left: 20px;
+	width: 50%;
+	box-shadow: 0 30px 20px rgba(0, 0, 0, 0.2);
+	transform: rotate(-3deg);
+	z-index: -1;
+}
+
+.shadow-warp:after {
+	right: 20px;
+	left: auto;
+	transform: rotate(3deg);
+}
+
+.shadow-blur {
+	position: relative;
+}
+
+.shadow-blur::before {
+	content: "";
+	display: block;
+	background: inherit;
+	filter: blur(10px);
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 10px;
+	left: 10px;
+	z-index: -1;
+	opacity: 0.4;
+	transform-origin: 0 0;
+	border-radius: inherit;
+	transform: scale(1, 1);
+}
+
+/* ==================
+          背景颜色等
+ ==================== */
+
+$useColorNames: "red", "orange", "yellow", "olive", "green", "cyan", "blue", "purple", "mauve", "pink", "brown", "grey", "gray", "black", "white";
+$useColors: #e54d42, #f37b1d, #fbbd08, #8dc63f, #39b54a, #1cbbb4, #0081ff, #6739b6, #9c26b0, #e03997, #a5673f, #8799a3, #aaaaaa, #000000, #ffffff;
+
+@each $colorName in $useColorNames {
+	$index: index($useColorNames, $colorName);
+	.line-#{$colorName}::after { border-color: nth($useColors, $index); }
+	.bg-#{$colorName} { background-color: nth($useColors, $index); }
+	.text-#{$colorName} { color: nth($useColors, $index); }
+
+	// 对颜色使用底色
+	.bg-#{$colorName}.light { background-color: #{lighten(nth($useColors, $index), 10%)}; }
+	.text-#{$colorName}.light { color: #{lighten(nth($useColors, $index), 10%)}; }
+	@for $i from 3 through 6 {
+		.bg-#{$colorName}.light#{$i} { background-color: #{lighten(nth($useColors, $index), $i*5%)}; }
+		.text-#{$colorName}.light#{$i} { color: #{lighten(nth($useColors, $index), $i*5%)}; }
+	}
+
+	// 渐变颜色
+	.bg-gradual-#{$colorName} { background-image: linear-gradient(45deg, darken(nth($useColors, $index), 10%), lighten(nth($useColors, $index), 10%)); }
+
+	.shadow[class*="-#{$colorName}"] { box-shadow: 6px 6px 8px #{rgba(nth($useColors, $index), 20%)}; }
+	.text-shadow[class*="-red"] { text-shadow: 6px 6px 8px #{rgba(nth($useColors, $index), 20%)}; }
+}
+
+.bg-img {
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.bg-mask {
+	background-color: #333333;
+	position: relative;
+}
+
+.bg-mask::after {
+	content: "";
+	border-radius: inherit;
+	width: 100%;
+	height: 100%;
+	display: block;
+	background-color: rgba(0, 0, 0, 0.4);
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+}
+
+.bg-shadeTop {
+	background-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.01));
+	color: #ffffff;
+}
+
+.bg-shadeBottom {
+	background-image: linear-gradient(rgba(0, 0, 0, 0.01), rgba(0, 0, 0, 1));
+	color: #ffffff;
+}
+
+/* ==================
+          文本
+ ==================== */
+
+// 定义方框大小
+@for $i from 12 through 120 {
+	@if $i % 2 == 0 {
+		.font-size-#{$i} {
+			font-size: $i + px;
+		}
+	}
+}
+
+.text-Abc {
+	text-transform: Capitalize;
+}
+
+.text-ABC {
+	text-transform: Uppercase;
+}
+
+.text-abc {
+	text-transform: Lowercase;
+}
+
+.text-price::before {
+	content: "¥";
+	font-size: 80%;
+	margin-right: 4px;
+}
+
+.text-cut {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.text-bold {
+	font-weight: bold;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.text-content {
+	line-height: 1.6;
+}
+
+.text-left {
+	text-align: left;
+}
+
+.text-right {
+	text-align: right;
+}
+
+// 补充类型
+@for $i from 5 through 50 {
+	.radius#{$i} { border-radius: $i + px;}
+}
+
+@for $i from 22 through 90 {
+	.lineHeight#{$i} { line-height: $i + px; }
+}

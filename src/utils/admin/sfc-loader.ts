@@ -5,7 +5,7 @@ import * as vuei18n from 'vue-i18n'
 // 引入vue router
 import * as vueRouter from 'vue-router';
 import * as ElementPlus from 'element-plus';
-import * as ElementIcons from '@element-plus/icons';
+import * as ElementIcons from '@element-plus/icons-vue';
 import * as VueUseCore from '@vueuse/core';
 // @ts-ignore
 import * as throttleDebounce from 'throttle-debounce';
@@ -33,6 +33,7 @@ export const loadModuleOptions = {
         '@vueuse/core': VueUseCore,
         'element-plus': ElementPlus,
         '@element-plus/icons': ElementIcons,
+        '@element-plus/icons-vue': ElementIcons,
         'vue-i18n': vuei18n,
         'throttle-debounce': throttleDebounce,
         'sortablejs': sortablejs,

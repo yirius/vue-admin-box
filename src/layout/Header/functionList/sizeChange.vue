@@ -28,7 +28,8 @@ export default defineComponent({
     const route = useRoute()
     const elementSize = computed(() => store.state.app.elementSize)
     const list = [
-      { size: 'default', name: 'message.system.size.default' },
+      { size: 'large', name: 'message.system.size.large' },
+      // { size: 'default', name: 'message.system.size.default' },
       { size: 'medium', name: 'message.system.size.medium' },
       { size: 'small', name: 'message.system.size.small' },
       { size: 'mini', name: 'message.system.size.mini' },
@@ -49,10 +50,10 @@ export default defineComponent({
       this.setElementSize()
     },
     setElementSize() {
-      this.$ELEMENT.size = this.elementSize
-      this.$router.replace({
-        path: "/redirect" + this.fullPath
-      })
+      // this.$ELEMENT.size = this.elementSize
+      // this.$router.replace({
+      //   path: "/redirect" + this.fullPath
+      // })
     }
   }
 })

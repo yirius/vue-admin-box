@@ -37,7 +37,7 @@ import Item from './item.vue'
 import { defineComponent, computed, unref, watch, reactive, ref, nextTick } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
-import { ArrowDown, RefreshLeft, CircleClose, FullScreen } from '@element-plus/icons'
+import { ArrowDown, RefreshLeft, CircleClose, FullScreen } from '@element-plus/icons-vue'
 import tabsHook from './tabsHook'
 interface ElScrollbar {
   scrollbar: HTMLDivElement,
@@ -157,9 +157,9 @@ export default defineComponent({
     function setPosition() {
       if (scrollbarDom.value) {
         const domBox = {
-          scrollbar: scrollbarDom.value.scrollbar.querySelector('.el-scrollbar__wrap ') as HTMLDivElement,
-          activeDom: scrollbarDom.value.scrollbar.querySelector('.active') as HTMLDivElement,
-          activeFather: scrollbarDom.value.scrollbar.querySelector('.el-scrollbar__view') as HTMLDivElement
+          scrollbar: scrollbarDom.value.scrollbar$.querySelector('.el-scrollbar__wrap ') as HTMLDivElement,
+          activeDom: scrollbarDom.value.scrollbar$.querySelector('.active') as HTMLDivElement,
+          activeFather: scrollbarDom.value.scrollbar$.querySelector('.el-scrollbar__view') as HTMLDivElement
         }
         for (let i in domBox) {
           if (!domBox[i]) {

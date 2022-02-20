@@ -2,7 +2,7 @@ import {Component} from "vue";
 import {App} from "@vue/runtime-core";
 
 import ElementPlus from 'element-plus'
-import * as ElementIcons from '@element-plus/icons'
+import * as ElementIcons from '@element-plus/icons-vue'
 import 'element-plus/theme-chalk/display.css' // 引入基于断点的隐藏类
 import 'element-plus/dist/index.css'
 

@@ -15,6 +15,7 @@ export default {
     loginOut: '退出登录',
     user: '管理员',
     size: {
+      large: '大',
       default: '默认',
       medium: '中',
       small: '小',
