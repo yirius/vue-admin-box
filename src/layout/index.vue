@@ -109,18 +109,6 @@ export default defineComponent({
     width: 0 !important;
   }
 }
-.el-main {
-  background-color: var(--system-container-background);
-  height: 100%;
-  padding: 0;
-  overflow-x: hidden;
-}
-.el-main-box {
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
-  box-sizing: border-box;
-}
 @media screen and (max-width: 1000px) {
   .el-aside {
     position: fixed;
@@ -141,5 +129,20 @@ export default defineComponent({
     z-index: 999;
     background: rgba(0, 0, 0, 0.5);
   }
+}
+</style>
+<!-- 重写一下全部的el-main -->
+<style lang="scss" >
+.el-main {
+  background-color: var(--system-container-background);
+  height: 100%;
+  padding: 0;
+  overflow-x: hidden;
+}
+.el-main-box {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 </style>
