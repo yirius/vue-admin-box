@@ -4,10 +4,10 @@
         <img src="https://img.shields.io/badge/vue3-3.0.5-brightgreen.svg" alt="vue">
     </a>
     <a href="https://github.com/element-plus/element-plus">
-        <img src="https://img.shields.io/badge/elementPlus-1.0.2beta.42-brightgreen.svg" alt="element-plus">
+        <img src="https://img.shields.io/badge/elementPlus-^2.0.5-brightgreen.svg" alt="element-plus">
     </a>
     <a href="https://github.com/vitejs/vite">
-        <img src="https://img.shields.io/badge/vite-2.2.3-brightgreen.svg" alt="vite">
+        <img src="https://img.shields.io/badge/vite-^2.8.6-brightgreen.svg" alt="vite">
     </a>
     <a href="https://github.com/microsoft/TypeScript">
         <img src="https://img.shields.io/badge/typescript-4.1.3-brightgreen.svg" alt="typescript">
@@ -29,7 +29,8 @@ English | [简体中文](./README.zh-CN.md)
 
 ## Preview
 if you are not in China, maybe you should download the project to show the demo or use a vpn to visit the online demo.
-- [demo](http://vue-admin-box.51weblove.com) 
+- [demo China](https://cmdparkour.gitee.io/vue-admin-box/)
+- [demo World](https://cmdparkour.github.io/vue-admin-box/dist/)
 - [github address](https://github.com/cmdparkour/vue-admin-box)
 - [gitee address](https://gitee.com/cmdparkour/vue-admin-box)
 - It is recommended to use yarn or cnpm for installation in China. NPM installation is prone to problems
@@ -99,7 +100,10 @@ There are four basic templates, which are suitable for zero development and use,
    ```
    
 ## Partner project
+* [Thinker-Admin-Box - springboot with vue-admin-box, use java code to generate vue page](https://github.com/yirius/thinker-admin-box)
 * [H5-dooring - a low code project about the mobile website](http://h5.dooring.cn)
+* [ant-simple-pro - a middle website based on Vue3.0, react and angular](https://github.com/lgf196/ant-simple-pro)
+* [vue-vben-admin - a modern vue admin. It is based on Vue3, vite and TypeScript. It's fast！](https://github.com/vbenjs/vue-vben-admin)
 
 
 ## preview

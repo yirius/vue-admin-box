@@ -123,13 +123,11 @@ router.beforeEach(async (to, _from, next) => {
       // 动态添加路由：防止非首页刷新时跳转回首页的问题
       // 确保 addRoute() 时动态添加的路由已经被完全加载上去
       next({ ...to, replace: true });
-    } else {
-      next()
+      return;
     }
+    next();
   } else {
     next("/login"); // 全部重定向到登录页
-
-    to.meta.title ? (changeTitle(to.meta.title)) : ""; // 动态title
   }
 });
 

@@ -29,10 +29,10 @@ export default defineComponent({
     const elementSize = computed(() => store.state.app.elementSize)
     const list = [
       { size: 'large', name: 'message.system.size.large' },
-      // { size: 'default', name: 'message.system.size.default' },
-      { size: 'medium', name: 'message.system.size.medium' },
+      { size: 'default', name: 'message.system.size.default' },
+      // { size: 'medium', name: 'message.system.size.medium' },
       { size: 'small', name: 'message.system.size.small' },
-      { size: 'mini', name: 'message.system.size.mini' },
+      // { size: 'mini', name: 'message.system.size.mini' },
     ]
     const { fullPath } = unref(route)
     return {

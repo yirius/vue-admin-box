@@ -13,7 +13,9 @@ const directive: Directive = {
     let pressTimer: any = null
     // 创建计时器（ 2秒后执行函数 ）
     let start = (e: MouseEvent|TouchEvent) => {
+      // @ts-ignore
       if (e.button) {
+        // @ts-ignore
         if (e.type === 'click' && e.button !== 0) {
           return
         }
@@ -25,6 +27,7 @@ const directive: Directive = {
       }
     }
     // 取消计时器
+    // @ts-ignore
     let cancel = (e) => {
       if (pressTimer !== null) {
         clearTimeout(pressTimer)

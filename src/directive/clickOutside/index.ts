@@ -12,6 +12,7 @@ const directive: Directive = {
     if (typeof binding.value !== 'function') {
       throw 'callback must be a function'
     }
+    //@ts-ignore
     el.__handleClick__ = function(e) {
       if (el.contains(e.target)) {
         binding.value(false)

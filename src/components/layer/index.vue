@@ -1,12 +1,10 @@
 <template>
-  <div v-drag>
+  <div v-drag="layer.show">
     <el-dialog
-      ref="dialog"
-      v-model="layer.show"
-      :title="layer.title"
-      :width="layer.width"
-      custom-class="componentSmallScreenShow"
-      center
+        v-model="layer.show"
+        :title="layer.title"
+        :width="layer.width"
+        center
     >
       <slot></slot>
       <template #footer v-if="layer.showButton">
@@ -20,19 +18,14 @@
 </template>
 
 <script lang="ts">
-import type { Ref } from 'vue'
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent } from 'vue'
 import drag from '@/directive/drag/index'
-import { UseDialogProps } from 'element-plus/lib/el-dialog/src/dialog'
 export interface LayerInterface {
   show: boolean;
   title: string;
   showButton?: boolean;
   width?: string;
   [propName: string]: any;
-}
-interface SystemDialogProps extends UseDialogProps {
-  handleClose: Function
 }
 export interface LayerType {
   close: Function
@@ -55,30 +48,19 @@ export default defineComponent({
     drag
   },
   setup(props, ctx) {
-    const dialog: Ref<SystemDialogProps> = ref(null) as any
     function confirm() {
       ctx.emit('confirm')
     }
     function close() {
-      dialog.value.handleClose()
+      props.layer.show = false
     }
     return {
-      dialog,
       confirm,
       close
     }
   }
 })
 </script>
-
-
-<style lang="scss">
-@media screen and (max-width: 768px) {
-  .componentSmallScreenShow {
-    width: 100% !important;
-  }
-}
-</style>
 
 <style lang="scss" scoped>
 

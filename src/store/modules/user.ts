@@ -1,6 +1,5 @@
 import {loginApi, getInfoApi, loginOutApi} from '@/api/user'
 import {ActionContext} from 'vuex'
-import request from "@/config/request";
 import login from "@/config/login";
 
 export interface userState {
