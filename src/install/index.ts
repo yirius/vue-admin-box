@@ -6,6 +6,14 @@ import * as ElementIcons from '@element-plus/icons-vue'
 import 'element-plus/theme-chalk/display.css' // 引入基于断点的隐藏类
 import 'element-plus/dist/index.css'
 
+import VXETable from 'vxe-table'
+import VXETablePluginElement from 'vxe-table-plugin-element'
+import VXETablePluginExportXLSX from 'vxe-table-plugin-export-xlsx'
+import 'vxe-table/lib/style.css'
+import 'vxe-table-plugin-element/dist/style.css'
+VXETable.use(VXETablePluginElement)
+VXETable.use(VXETablePluginExportXLSX)
+
 /**
  * 安装图标
  */
@@ -37,4 +45,13 @@ export function installDirectives(app: App) {
             directivesFiles[directive].default
         );
     }
+}
+
+/**
+ * 安装element-plus
+ * @param app
+ * @param size
+ */
+export function installVxeTable(app: App) {
+    app.use(VXETable);
 }

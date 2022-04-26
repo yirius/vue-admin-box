@@ -33,7 +33,7 @@ import Layer from '@/components/layer/index.vue'
 import Tip from './tip.vue'
 import Cropper from 'cropperjs'
 import 'cropperjs/dist/cropper.css'
-import { Upload, Download, Picture } from '@element-plus/icons'
+import { Upload, Download, Picture } from '@element-plus/icons-vue'
 
 const props = defineProps({
   layer: {
