@@ -3,14 +3,30 @@
 
 <script type="ts">
 import * as Vue from 'vue';
-import * as PageRender from '@/utils/admin/pageRender';
+import { useStore } from 'vuex';
+import * as AdminIs from '@/utils/is';
+import * as VueRouter from "vue-router";
+import * as AdminTool from '@/utils/tools';
+import * as RequestApi from '@/api/request';
+import * as elementPlus from 'element-plus';
 import Tinymce from "@/components/tinymce/index.vue";
-import vxeTableBox from "@/components/vxeTable/index.vue";
+import * as PageRender from '@/utils/admin/pageRender';
+import { uploadHttpRequestApi } from "@/components/upload/index";
 
 export default Vue.defineComponent({
   name: "page",
   props: {
+    modelRefsValue: {
+      type: Object,
+      require: true,
+      default: {}
+    },
     modelValue: {
+      type: Object,
+      require: true,
+      default: {}
+    },
+    formValue: {
       type: Object,
       require: true,
       default: {}
@@ -19,90 +35,164 @@ export default Vue.defineComponent({
       type: Object,
       require: true,
       default: {}
+    },
+    useIdKey: {
+      type: Number,
+      default: null,
+      require: false
     }
   },
-  components: { Tinymce, vxeTableBox },
+  components: { Tinymce },
   /**
    * props渲染一下参数
    * @param props
    */
-  setup(props) {
-    // 分析属性参数, 如
-    let attrFunctions = {}, childrenCount = 1;
-    const parserAttrs = (attrs) => {
-      if(attrs) {
-        // 保存一下参数
-        if(attrs['childrenCount'] == null) {
-          attrs['childrenCount'] = childrenCount;
-          childrenCount++;
-        }
-        // 开始计算
-        var useIndex = attrs['childrenCount'];
-        for(const attrName in attrs) {
-          const isCalcFunction = attrName.indexOf(":") == 0, trueAttrName = attrName.replace(":", "");
-          if(isCalcFunction) {
-            if(!attrFunctions[useIndex]) { attrFunctions[useIndex] = {}; }
-            if(!attrFunctions[useIndex][trueAttrName]) {
-              // 说明存在需要进行计算的东西，进行直接存储计算
-              ((attrFunction) => {
-                attrFunctions[useIndex][trueAttrName] = () => {
-                  return eval("(function() { "+attrFunction+" })()");
-                };
-              })(attrs[attrName]);
-            }
-            // 删除需要计算的attr
-            delete attrs[attrName];
-          }
-          // 如果本次或者下一次有对应的参数，直接运算
-          if(attrFunctions[useIndex] && attrFunctions[useIndex][trueAttrName]) {
-            // 存进去正式的参数
-            attrs[trueAttrName] = attrFunctions[useIndex][trueAttrName]();
-          }
-        }
-        return attrs;
-      }
-      return {};
-    }
+  setup(props, vm) {
+    const $store = useStore();
+    const router = VueRouter.useRouter();
 
-    // 计算所有的子组件
-    const calcChildren = (children) => {
-      var childrenArray = [];
-      children.forEach(data => {
-        if(typeof data != "object") {
-          childrenArray = [...childrenArray, ...PageRender.regexpMatchAndReplace("\`\\$\{.*?\}\`", data, props.modelValue)];
+    // 保存一下渲染完成的参数，方便找到相关内容
+    let $refs = null;
+
+    const fieldIdOperate = {
+      fieldIdToIndex: {},
+      findFieldUseId: function(id) {
+        if(this.fieldIdToIndex[id]) {
+          return this.fieldIdToIndex[id];
         } else {
-          if(data.attrs.label=="男") {
-            console.log(Vue.h(Vue.resolveDynamicComponent(data.component), parserAttrs(data.attrs), {
-              default: () => calcChildren(data.children||[])
-            }));
+          for(var i in this.fieldIdToIndex) {
+            if(i.endsWith(id)) {
+              return this.fieldIdToIndex[i];
+            }
           }
-          childrenArray.push(
-              Vue.h(Vue.resolveDynamicComponent(data.component), parserAttrs(data.attrs), data.children&&data.children.length>0?{
-                default: () => calcChildren(data.children||[])
-              }:null)
-          );
         }
-      });
+        return null;
+      },
+      findPropRenderUseIndex: (index, renderChildren) => {
+        if(!index) return null;
+        let indexArray = typeof index == "string" ? index.split("-") : index;
+        if(!renderChildren) {
+          renderChildren = props.renderValue.render.children;
+          indexArray.splice(0, 1);
+        }
+        if(indexArray.length == 1) {
+          return renderChildren[indexArray[0]];
+        } else {
+          const curIndex = indexArray[0];
+          indexArray.splice(0, 1);
+          return fieldIdOperate.findPropRenderUseIndex(indexArray, renderChildren[curIndex].children);
+        }
+      },
+      find(id) {
+        return this.findPropRenderUseIndex(this.findFieldUseId(id));
+      }
+    };
+
+    const renderTemplate = (slotData, childrens, prevIndex) => {
+      var childrenArray = [];
+      if(childrens&&AdminIs.isArray(childrens)) {
+        childrens.forEach((item, index) => {
+          // 记录一下路径，方便查找
+          if(item.attrs.id) {
+            fieldIdOperate.fieldIdToIndex[item.attrs.id] = prevIndex + "-" + index;
+            item.attrs.ref = item.attrs.id;
+          }
+          // 开始循环template
+          if(typeof item != "object") {
+            childrenArray = [...childrenArray, ...PageRender.regexpMatchAndReplace("\`\\$\{.*?\}\`", item, {})];
+          } else {
+            if (item.component === "html") {
+              childrenArray = [...childrenArray, ...PageRender.regexpMatchAndReplace("\`\\$\{.*?\}\`", item.extInfo.html || "", {})];
+            } else {
+              let slotRender = item.slots || {};
+              for (let slotRenderKey in slotRender) {
+                if(typeof slotRender[slotRenderKey] != "function") {
+                  ((useChildren, data, dataKey) => {
+                    data[dataKey] = (() => {
+                      return (slotData) => renderTemplate(slotData, useChildren, prevIndex + "-" + index)
+                    })();
+                  })(slotRender[slotRenderKey], slotRender, slotRenderKey)
+                }
+              }
+              // 组装children
+              for (let attrsKey in item.attrs) {
+                if(AdminIs.isString(item.attrs[attrsKey]) && item.attrs[attrsKey].startsWith("[`eval`]")) {
+                  item.attrs[attrsKey] = eval(item.attrs[attrsKey].replace("[`eval`]", ""));
+                }
+              }
+              childrenArray.push(Vue.h(Vue.resolveDynamicComponent(item.component), item.attrs, {
+                default: (slotData) => renderTemplate(slotData, item.children, prevIndex + "-" + index),
+                ...slotRender,
+              }));
+            }
+          }
+        });
+      }
       return childrenArray;
     }
 
-    setTimeout(() => {
-      console.log(props.renderValue);
-    }, 1000)
+    // 设置返回参数
+    vm.expose({
+      findValue() {
+        return props;
+      },
+      findRender(id) {
+        return fieldIdOperate.find(id);
+      },
+      findRefs(fieldName) {
+        if(fieldName) {
+          let findRefsKey = [];
+          for (let $refsKey in $refs) {
+            if($refsKey.endsWith(fieldName)) {
+              findRefsKey.push($refs[$refsKey]);
+            }
+          }
+          if(findRefsKey.length > 0) {
+            return findRefsKey;
+          }
+        }
+        return $refs;
+      }
+    });
 
     // 直接渲染
-    return () => Vue.h(
-        Vue.resolveDynamicComponent(props.renderValue.render.component),
-        parserAttrs(props.renderValue.render.attrs),
-        {
-          default: () => calcChildren(props.renderValue.render.children)
+    return () => {
+      for (let attrsKey in props.renderValue.render.attrs) {
+        if(AdminIs.isString(props.renderValue.render.attrs[attrsKey]) && props.renderValue.render.attrs[attrsKey].startsWith("[`eval`]")) {
+          props.renderValue.render.attrs[attrsKey] = eval(props.renderValue.render.attrs[attrsKey].replace("[`eval`]", ""));
         }
-    )
-    // return () => Vue.h(Vue.resolveDynamicComponent("ElCheckboxGroup"), {}, {
-    //   default: () => [
-    //     Vue.h(Vue.resolveDynamicComponent("ElCheckbox"), {label: '男'})
-    //   ]
-    // })
+      }
+      if(props.renderValue.render.attrs.id) {
+        props.renderValue.render.attrs.ref = props.renderValue.render.attrs.id;
+      }
+
+      let slots = props.renderValue.render.slots || {};
+      for (let slotRenderKey in slots) {
+        if(typeof slots[slotRenderKey] != "function") {
+          ((useChildren, data, dataKey) => {
+            data[dataKey] = (slotData) => renderTemplate(slotData, useChildren, dataKey+"0");
+          })(slots[slotRenderKey], slots, slotRenderKey)
+        }
+      }
+
+      const renderedTemplate = Vue.h(
+          Vue.resolveDynamicComponent(props.renderValue.render.component),
+          props.renderValue.render.attrs,
+          {
+            default: (slotData) => renderTemplate(slotData, props.renderValue.render.children, "0"),
+            ...slots,
+          }
+      );
+      // 循环一下，变相找到refs参数，方便后续获取
+      if(renderedTemplate.ref) {
+        for (let refKey in renderedTemplate.ref) {
+          if(AdminIs.isObject(renderedTemplate.ref[refKey]) && renderedTemplate.ref[refKey].uid) {
+            $refs = renderedTemplate.ref[refKey].refs;
+          }
+        }
+      }
+      return renderedTemplate;
+    }
   },
 });
 </script>

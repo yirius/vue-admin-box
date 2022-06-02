@@ -16,7 +16,7 @@
     "codemirror": "^5.65.2",
     "cropperjs": "^1.5.12",
     "echarts": "^5.3.2",
-    "element-plus": "^2.1.11",
+    "element-plus": "^2.2.2",
     "esno": "^0.8.0",
     "exceljs": "^4.3.0",
     "fs-extra": "^10.1.0",
@@ -34,7 +34,7 @@
     "vue-router": "^4.0.14",
     "vue3-sfc-loader": "^0.8.4",
     "vuex": "^4.0.0",
-    "vxe-table": "^4.2.2",
+    "vxe-table": "^4.2.3",
     "vxe-table-plugin-element": "^3.0.5",
     "vxe-table-plugin-export-xlsx": "^3.0.3",
     "xe-utils": "^3.5.4"

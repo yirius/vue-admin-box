@@ -6,7 +6,7 @@ import * as objects from './tools/objects';
 import * as storage from './tools/storage';
 import * as theme from './tools/theme';
 
-export default {
+export {
     copy,
     datetime,
     numbers,

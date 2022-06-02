@@ -4,42 +4,49 @@ import { defineComponent, h, createVNode, ref, nextTick } from 'vue'
 import reload from './reload.vue'
 import NProgress from '@/utils/system/nprogress'
 
+export function createNewDefined(comm: any) {
+  const name = (comm.default.name || 'vueAdminBox') + '$' + Date.now();
+  return defineComponent({
+    name,
+    setup() {
+      const isReload = ref(false);
+      let timeOut: any = null;
+      const handleReload = () => {
+        isReload.value = true;
+        timeOut && clearTimeout(timeOut);
+        NProgress.start();
+        timeOut = setTimeout(() => {
+          nextTick(() => {
+            NProgress.done();
+            isReload.value = false;
+          });
+        }, 260);
+      };
+      return {
+        isReload,
+        handleReload
+      };
+    },
+    render: function () {
+      if (this.isReload) {
+        return h('div', { class: 'el-main-box' }, [h(reload)]);
+      } else {
+        return h('div', { class: 'el-main-box' }, [createVNode(comm.default)]);
+      }
+    }
+  });
+}
+
 export function createNameComponent(component: any) {
   return () => {
-    return new Promise((res) => {
-      component().then((comm: any) => {
-        const name = (comm.default.name || 'vueAdminBox') + '$' + Date.now();
-        const tempComm = defineComponent({
-          name,
-          setup() {
-            const isReload = ref(false);
-            let timeOut: any = null;
-            const handleReload = () => {
-              isReload.value = true;
-              timeOut && clearTimeout(timeOut);
-              NProgress.start();
-              timeOut = setTimeout(() => {
-                nextTick(() => {
-                  NProgress.done();
-                  isReload.value = false;
-                });
-              }, 260);
-            };
-            return {
-              isReload,
-              handleReload
-            };
-          },
-          render: function () {
-            if (this.isReload) {
-              return h('div', { class: 'el-main-box' }, [h(reload)]);
-            } else {
-              return h('div', { class: 'el-main-box' }, [createVNode(comm.default)]);
-            }
-          }
+    return new Promise((resolve) => {
+      if(typeof component == "object") {
+        resolve(createNewDefined({default: component}));
+      } else {
+        component().then((comm: any) => {
+          resolve(createNewDefined(comm));
         });
-        res(tempComm);
-      });
+      }
     });
   };
 }

@@ -60,14 +60,14 @@ service.interceptors.response.use(
       }
 
       // 如果不存在code，那就仍会错误
-      showError(resultData[msgName]);
+      showError(resultData, msgName, dataName);
       return Promise.reject(response)
   }, (error: AxiosError)=> {
-      const { msg: msgName } = requestConfig.fieldName;
+      const { msg: msgName, data: dataName } = requestConfig.fieldName;
       const resultData = error.response?.data;
 
       // 如果不存在code，那就仍会错误
-      showError(resultData[msgName]);
+      showError(resultData, msgName, dataName);
       return Promise.reject(error)
   }
 )
@@ -75,19 +75,18 @@ service.interceptors.response.use(
 let localMsg: any = null;
 
 // 错误处理
-function showError(msg: string) {
-    if(msg.indexOf("message.")>=0) {
-        let msgArr = msg.split("|");
+function showError(resultData: any, msgName: string, dataName: string) {
+    if(resultData._local && resultData._local.indexOf("message.") >= 0) {
         if(localMsg == null) {
             import("@/locale").then(data => {
                 localMsg = data.default;
-                showElMessage(localMsg.global.t(msgArr[0], msgArr[1] ? JSON.parse(msgArr[1]) : {}))
+                showElMessage(localMsg.global.t(resultData._local, resultData[dataName] || {}));
             })
         } else {
-            showElMessage(localMsg.global.t(msgArr[0], msgArr[1] ? JSON.parse(msgArr[1]) : {}))
+            showElMessage(localMsg.global.t(resultData._local, resultData[dataName] || {}))
         }
     } else {
-        showElMessage(msg);
+        showElMessage(resultData[msgName]);
     }
 }
 

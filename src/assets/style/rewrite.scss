@@ -1,3 +1,18 @@
 .el-table {
   //font-size: 12px;
 }
+
+.el-tree {
+  width: 100%;
+}
+
+@media screen and(max-width: 768px) {
+  .vxe-pager {
+    height: auto !important;
+    margin-top: 10px;
+
+    .vxe-pager--sizes,.vxe-pager--total {
+      padding-top: 10px;
+    }
+  }
+}

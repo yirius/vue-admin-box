@@ -15,6 +15,9 @@ import * as echartsCore from 'echarts/core';
 import * as echartsRenderers from 'echarts/renderers';
 import * as echartsCharts from 'echarts/charts';
 import * as echartsComponents from 'echarts/components';
+// vxe-table
+import * as vxeTable from 'vxe-table';
+
 import store from "@/store";
 import requestConfig from "@/config/request";
 
@@ -29,6 +32,7 @@ let importedFiles: Record<string, {[key: string]: any}> = {};
 export const loadModuleOptions = {
     moduleCache: {
         vue,
+        'vxe-table': vxeTable,
         'vue-router': vueRouter,
         '@vueuse/core': VueUseCore,
         'element-plus': ElementPlus,

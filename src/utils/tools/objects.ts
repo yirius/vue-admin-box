@@ -1,4 +1,4 @@
-import { isObject } from "../is";
+import {isObject, isString, isArray} from "../is";
 
 /**
  * 判断两数组是否相同
@@ -51,4 +51,43 @@ export function deepMerge(src: any = {}, target: any = {}) {
 		src[key] = isObject(src[key]) ? deepMerge(src[key], target[key]) : (src[key] = target[key]);
 	}
 	return src;
+}
+
+/**
+ * 找到对应的key
+ * @param data
+ * @param index
+ */
+export function findObjectKey(data: Object, index: number) {
+	return Object.keys(data)[index];
+}
+
+/**
+ * 便捷寻找Map值
+ * @param data
+ * @param index
+ */
+export function findObjectValue(data: Object, index: number) {
+	// @ts-ignore
+	return data[findObjectKey(data, index)];
+}
+
+/**
+ * 直接解析obj的值，进行eval设置
+ * @param obj
+ */
+export function evalStringFunction(obj: any) {
+	if(isArray(obj)) {
+		obj.forEach(item => evalStringFunction(item));
+	} else if(isObject(obj)) {
+		for (const objKey in obj) {
+			if(isString(obj[objKey]) && obj[objKey].startsWith("[`eval`]")) {
+				obj[objKey] = eval(obj[objKey].replace("[`eval`]", ""));
+			} else if(isArray(obj[objKey])) {
+				obj[objKey].forEach((item: any) => evalStringFunction(item));
+			} else if(isObject(obj[objKey])) {
+				evalStringFunction(obj[objKey]);
+			}
+		}
+	}
 }

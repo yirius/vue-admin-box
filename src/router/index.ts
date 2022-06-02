@@ -18,6 +18,7 @@ getLang({});
 
 // 动态路由相关引入数据
 import Layout from '@/layout/index.vue'
+import ViewBaseComponent from '@/views/base/component.vue'
 import { createNameComponent } from './createNode'
 
 // 定义一下找不到的重定向
@@ -61,16 +62,21 @@ export function transferMenuToRouter(menus: any[]): RouteRecordRaw[] {
     } else {
       // @ts-ignore
       if(typeof item.component === "string") {
-        let componentPath = item.component;
-        if(item.component.startsWith("@") || item.component.startsWith("/@")) {
-          componentPath = componentPath.replace("/@/", "../").replace("@/", "../").replace("@", "../");
-          if(vuesFiles[componentPath]) {
-            item.component = createNameComponent(vuesFiles[componentPath]);
-          }
+        if(item.meta.render) {
+          // 如果是直接内部组件json模式渲染
+          item.component = createNameComponent(ViewBaseComponent);
         } else {
-          item.component = createNameComponent(() => asyncLoadModule(componentPath, loadModuleOptions).then((data: any) => {
-            return {default: data}
-          }));
+          let componentPath = item.component;
+          if(item.component.startsWith("@") || item.component.startsWith("/@")) {
+            componentPath = componentPath.replace("/@/", "../").replace("@/", "../").replace("@", "../");
+            if(vuesFiles[componentPath]) {
+              item.component = createNameComponent(vuesFiles[componentPath]);
+            }
+          } else {
+            item.component = createNameComponent(() => asyncLoadModule(componentPath, loadModuleOptions).then((data: any) => {
+              return {default: data}
+            }));
+          }
         }
       }
     }

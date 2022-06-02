@@ -42,7 +42,7 @@
           </el-input>
 
           <el-form-item label="" v-if="login.captchaUrl">
-            <div style="display: flex">
+            <div style="display: flex;width: 100%">
               <el-input
                   size="large"
                   ref="password"
@@ -56,7 +56,7 @@
             </div>
           </el-form-item>
 
-          <el-button type="primary" :loading="form.loading" @click="submit" style="width: 100%;" size="medium">
+          <el-button type="primary" :loading="form.loading" @click="submit" style="width: 100%;" size="large">
             {{ $t('message.system.login') }}
           </el-button>
         </el-form>
@@ -117,7 +117,7 @@ export default defineComponent({
         }
         if (form.vercode === '') {
           ElMessage.warning({
-            message: t("message.thinker.admin.emptyVercode"),
+            message: t("message.thinker.token.emptyVercode"),
             type: 'warning'
           })
           return;

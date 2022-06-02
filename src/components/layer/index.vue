@@ -17,19 +17,12 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from 'vue'
 import drag from '@/directive/drag/index'
-export interface LayerInterface {
-  show: boolean;
-  title: string;
-  showButton?: boolean;
-  width?: string;
-  [propName: string]: any;
-}
-export interface LayerType {
-  close: Function
-}
+import * as elementPlus from 'element-plus';
+import { uploadHttpRequestApi } from "@/components/upload/index";
+
 export default defineComponent({
   props: {
     layer: {
