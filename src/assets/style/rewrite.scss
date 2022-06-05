@@ -6,6 +6,15 @@
   width: 100%;
 }
 
+.vxe-form .vxe-form--item-content {
+  & > .el-range-editor.el-input__wrapper {
+    padding: 0;
+  }
+  .el-icon {
+    margin-left: 5px;
+  }
+}
+
 @media screen and(max-width: 768px) {
   .vxe-pager {
     height: auto !important;
@@ -14,5 +23,9 @@
     .vxe-pager--sizes,.vxe-pager--total {
       padding-top: 10px;
     }
+  }
+
+  .vxe-row>.vxe-col--12 {
+    width: 100%;
   }
 }

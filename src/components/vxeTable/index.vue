@@ -35,9 +35,63 @@ export default _Vue.defineComponent({
     columns: {
       type: Array,
       require: true
+    },
+    modelRefsValue: {
+      type: Object,
+      require: true,
+      default: {}
+    },
+    useIdKey: {
+      type: Number,
+      default: null,
+      require: false
     }
   },
   setup (props, vm) {
+    if(!_VXETable.renderer.get("ThinkerInputRange")) {
+      _VXETable.renderer.add("ThinkerInputRange", {
+        renderItemContent(renderOpts, params) {
+          delete params.data[params.property];
+          if(typeof params.data[params.property+"_start"] == "undefined") {
+            params.data[params.property+"_start"] = null;
+          }
+          if(typeof params.data[params.property+"_end"] == "undefined") {
+            params.data[params.property + "_end"] = null;
+          }
+          // 判断一下是否存在参数
+          let startComponent = "ElInput", endComponent = "ElInput", startAttrs = {}, endAttrs = {};
+          if(renderOpts.props&&renderOpts.props.startRender) {
+            startComponent = renderOpts.props.startRender.component||"ElInput";
+            startAttrs = renderOpts.props.startRender.attrs||{};
+          }
+          if(renderOpts.props&&renderOpts.props.endRender) {
+            endComponent = renderOpts.props.endRender.component||"ElInput";
+            endAttrs = renderOpts.props.endRender.attrs||{};
+          }
+          startAttrs.modelValue = params.data[params.property+"_start"];
+          startAttrs["onUpdate:modelValue"] = (value) => { params.data[params.property+"_start"] = value; };
+          delete startAttrs.id;
+          endAttrs.modelValue = params.data[params.property+"_end"];
+          endAttrs["onUpdate:modelValue"] = (value) => { params.data[params.property+"_end"] = value; };
+          delete endAttrs.id;
+
+          return _Vue.h(_Vue.resolveDynamicComponent("ElRow"), {style: "width: 100%", align: "middle", justify: "center"}, {
+            default: (slotData) => [
+              _Vue.h(_Vue.resolveDynamicComponent("ElCol"), {span: 11}, {
+                default: (slotData) => _Vue.h(_Vue.resolveDynamicComponent(startComponent), startAttrs, null)
+              }),
+              _Vue.h(_Vue.resolveDynamicComponent("ElCol"), {span: 2, align: "middle", justify: "center"}, {
+                default: (slotData) => [renderOpts.props.rangeKey||"-"]
+              }),
+              _Vue.h(_Vue.resolveDynamicComponent("ElCol"), {span: 11}, {
+                default: (slotData) => _Vue.h(_Vue.resolveDynamicComponent(endComponent), endAttrs, null)
+              })
+            ]
+          });
+        }
+      });
+    }
+
     const _$store = useStore(), _router = _VueRouter.useRouter();
     const varArgs = {Vue: _Vue, VueRouter: _VueRouter, VXETable: _VXETable, XEUtils: _XEUtils,
       AdminIs: _AdminIs, AdminTool: _AdminTool, RequestApi: _RequestApi, elementPlus: _elementPlus,
@@ -115,6 +169,20 @@ export default _Vue.defineComponent({
       columns: props.columns || []
     });
 
+    if(window.innerWidth && window.innerWidth <= 768) {
+      // 表单设置
+      if(gridOptions.value.formConfig && gridOptions.value.formConfig.items) {
+        gridOptions.value.formConfig.items.forEach((item, index) => {
+          if(index > 1) {
+            // 头两个依旧保留
+            if(!item.collapseNode) {
+              if(!item.folding) item.folding = true;
+            }
+          }
+        });
+      }
+    }
+
     return {
       vxeGrid,
       gridOptions,
@@ -125,5 +193,7 @@ export default _Vue.defineComponent({
 </script>
 
 <style scoped>
-
+  .system-table-box {
+    height: 100%;
+  }
 </style>

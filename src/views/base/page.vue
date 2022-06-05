@@ -16,6 +16,7 @@ import * as _elementPlus from 'element-plus';
 import { uploadHttpRequestApi as _uploadHttpRequestApi } from "@/components/upload/index";
 
 import Tinymce from "@/components/tinymce/index.vue";
+import ThinkerInputRange from "@/components/thinker/inputRange.vue";
 import * as PageRender from '@/utils/admin/pageRender';
 import { asyncLoadModule, loadModuleOptions } from '@/utils/admin/sfc-loader';
 
@@ -48,7 +49,7 @@ const componentIns = _Vue.defineComponent({
       require: false
     }
   },
-  components: { Tinymce },
+  components: { Tinymce, ThinkerInputRange },
   /**
    * props渲染一下参数
    * @param props
@@ -129,15 +130,48 @@ const componentIns = _Vue.defineComponent({
                 }
               }
               // 组装children
+              let vIfResult = true;
               for (let attrsKey in item.attrs) {
-                if(_AdminIs.isString(item.attrs[attrsKey]) && item.attrs[attrsKey].startsWith("[`eval`]")) {
-                  item.attrs[attrsKey] = eval(item.attrs[attrsKey].replace("[`eval`]", ""));
+                if (attrsKey == "vIf") {
+                  if(_AdminIs.isString(item.attrs[attrsKey]) && item.attrs[attrsKey].startsWith("[`eval`]")) {
+                    vIfResult = eval(item.attrs[attrsKey].replace("[`eval`]", ""));
+                  } else {
+                    vIfResult = item.attrs[attrsKey];
+                  }
+                  if(!_Vue.unref(vIfResult)) {
+                    break;
+                  }
+                } else {
+                  if(_AdminIs.isString(item.attrs[attrsKey]) && item.attrs[attrsKey].startsWith("[`eval`]")) {
+                    item.attrs[attrsKey] = eval(item.attrs[attrsKey].replace("[`eval`]", ""));
+                  }
                 }
               }
-              childrenArray.push(_Vue.h(_Vue.resolveDynamicComponent(item.component), item.attrs, {
-                default: (slotData) => renderTemplate(slotData, item.children, prevIndex + "-" + index),
-                ...slotRender,
-              }));
+
+              if(item.component == "ThinkerInputRange") {
+                delete item.attrs.modelValue;
+                delete item.attrs['onUpdate:modelValue'];
+                item.attrs.propsData = props;
+              } else if(item.component == "vxeTableBox") {
+                if(!item.attrs.onPropsChange) {
+                  item.attrs.onPropsChange = (runClouse) => {
+                    if(_AdminIs.isFunction(runClouse)) {
+                      runClouse({fieldIdOperate, $refs, renderValue: props.renderValue});
+                    }
+                  }
+                }
+              } else if(item.component == "ElCascader") {
+                if(!slotRender.default) {
+                  slotRender.default = (slotData) => { return slotData.data.label; }
+                }
+              }
+
+              if(_Vue.unref(vIfResult)) {
+                childrenArray.push(_Vue.h(_Vue.resolveDynamicComponent(item.component), item.attrs, {
+                  default: (slotData) => renderTemplate(slotData, item.children, prevIndex + "-" + index),
+                  ...slotRender,
+                }));
+              }
             }
           }
         });
@@ -146,7 +180,7 @@ const componentIns = _Vue.defineComponent({
     }
 
     // 设置返回参数
-    vm.expose({
+    const $expose = {
       findValue() {
         return props;
       },
@@ -167,7 +201,8 @@ const componentIns = _Vue.defineComponent({
         }
         return $refs;
       }
-    });
+    };
+    vm.expose($expose);
 
     // 直接渲染
     return () => {
@@ -205,6 +240,7 @@ const componentIns = _Vue.defineComponent({
           }
         }
       }
+
       return renderedTemplate;
     }
   },

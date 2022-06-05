@@ -159,5 +159,6 @@ export default defineComponent({
 <style scoped>
 .box {
   padding: 15px;
+  height: calc(100% - 30px);
 }
 </style>
