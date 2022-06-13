@@ -45,7 +45,7 @@ export default defineComponent({
   },
   setup(props, vm) {
     const _$store = useStore(), _router = _VueRouter.useRouter();
-    const varArgs = {Vue: _Vue, VueRouter: _VueRouter, VXETable: _VXETable, XEUtils: _XEUtils,
+    vm.opArgs = {Vue: _Vue, VueRouter: _VueRouter, VXETable: _VXETable, XEUtils: _XEUtils,
       AdminIs: _AdminIs, AdminTool: _AdminTool, RequestApi: _RequestApi, elementPlus: _elementPlus,
       uploadHttpRequestApi: _uploadHttpRequestApi, $store: _$store, router: _router};
 
@@ -71,6 +71,7 @@ export default defineComponent({
         slots: {}
       },
       renderReady: "",
+      getDataBefore: "",
       renderDataReady: "",
       components: []
     });
@@ -90,6 +91,7 @@ export default defineComponent({
         }
         renderValue.render = data.data.render;
         renderValue.renderReady = data.data.renderReady || "";
+        renderValue.getDataBefore = data.data.getDataBefore || "";
         renderValue.renderDataReady = data.data.renderDataReady || "";
         renderValue.components = data.data.components || [];
 

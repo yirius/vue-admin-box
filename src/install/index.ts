@@ -8,10 +8,13 @@ import 'element-plus/dist/index.css'
 
 import VXETable from 'vxe-table'
 import VXETablePluginElement from 'vxe-table-plugin-element'
+import VXETablePluginRenderer from 'vxe-table-plugin-renderer'
 import VXETablePluginExportXLSX from 'vxe-table-plugin-export-xlsx'
 import 'vxe-table/lib/style.css'
 import 'vxe-table-plugin-element/dist/style.css'
+import 'vxe-table-plugin-renderer/dist/style.css'
 VXETable.use(VXETablePluginElement)
+VXETable.use(VXETablePluginRenderer)
 VXETable.use(VXETablePluginExportXLSX)
 
 /**

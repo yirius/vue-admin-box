@@ -55,7 +55,7 @@ const componentIns = _Vue.defineComponent({
    * @param props
    */
   async setup(props, vm) {
-    const varArgs = {Vue: _Vue, VueRouter: _VueRouter, VXETable: _VXETable, XEUtils: _XEUtils,
+    vm.opArgs = {Vue: _Vue, VueRouter: _VueRouter, VXETable: _VXETable, XEUtils: _XEUtils,
       AdminIs: _AdminIs, AdminTool: _AdminTool, RequestApi: _RequestApi, elementPlus: _elementPlus,
       uploadHttpRequestApi: _uploadHttpRequestApi, $store: _$store, router: _router};
 

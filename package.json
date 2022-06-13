@@ -37,6 +37,7 @@
     "vxe-table": "^4.2.3",
     "vxe-table-plugin-element": "^3.0.5",
     "vxe-table-plugin-export-xlsx": "^3.0.3",
+    "vxe-table-plugin-renderer": "^3.0.2",
     "xe-utils": "^3.5.4"
   },
   "devDependencies": {

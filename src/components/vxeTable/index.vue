@@ -21,6 +21,7 @@ import * as _AdminTool from '@/utils/tools';
 import * as _RequestApi from "@/api/request";
 import * as _elementPlus from 'element-plus';
 import { uploadHttpRequestApi as _uploadHttpRequestApi } from "@/components/upload/index";
+import Sortable from 'sortablejs'
 
 export default _Vue.defineComponent({
   props: {
@@ -93,7 +94,7 @@ export default _Vue.defineComponent({
     }
 
     const _$store = useStore(), _router = _VueRouter.useRouter();
-    const varArgs = {Vue: _Vue, VueRouter: _VueRouter, VXETable: _VXETable, XEUtils: _XEUtils,
+    vm.opArgs = {Vue: _Vue, VueRouter: _VueRouter, VXETable: _VXETable, XEUtils: _XEUtils,
       AdminIs: _AdminIs, AdminTool: _AdminTool, RequestApi: _RequestApi, elementPlus: _elementPlus,
       uploadHttpRequestApi: _uploadHttpRequestApi, $store: _$store, router: _router};
 
@@ -169,6 +170,7 @@ export default _Vue.defineComponent({
       columns: props.columns || []
     });
 
+    // 设置大小
     if(window.innerWidth && window.innerWidth <= 768) {
       // 表单设置
       if(gridOptions.value.formConfig && gridOptions.value.formConfig.items) {
@@ -183,6 +185,56 @@ export default _Vue.defineComponent({
       }
     }
 
+    let sortable2;
+
+    const columnDrop2 = () => {
+      const $grid = vxeGrid.value
+      sortable2 = Sortable.create($grid.$el.querySelector('.body--wrapper>.vxe-table--header .vxe-header--row'), {
+        handle: '.vxe-header--column',
+        onEnd: (sortableEvent) => {
+          const targetThElem = sortableEvent.item
+          const newIndex = sortableEvent.newIndex;
+          const oldIndex = sortableEvent.oldIndex;
+          const { fullColumn, tableColumn } = $grid.getTableColumn()
+          const wrapperElem = targetThElem.parentNode;
+          const newColumn = fullColumn[newIndex]
+          if (newColumn.fixed) {
+            // 错误的移动
+            const oldThElem = wrapperElem.children[oldIndex];
+            if (newIndex > oldIndex) {
+              wrapperElem.insertBefore(targetThElem, oldThElem)
+            } else {
+              wrapperElem.insertBefore(targetThElem, oldThElem ? oldThElem.nextElementSibling : oldThElem)
+            }
+            _VXETable.modal.message({ content: '固定列不允许拖动！', status: 'error' })
+            return
+          }
+          // 获取列索引 columnIndex > fullColumn
+          const oldColumnIndex = $grid.getColumnIndex(tableColumn[oldIndex])
+          const newColumnIndex = $grid.getColumnIndex(tableColumn[newIndex])
+          // 移动到目标列
+          const currRow = fullColumn.splice(oldColumnIndex, 1)[0]
+          fullColumn.splice(newColumnIndex, 0, currRow)
+          $grid.loadColumn(fullColumn)
+        }
+      })
+    }
+
+    let initTime
+    _Vue.nextTick(() => {
+      // 加载完成之后在绑定拖动事件
+      initTime = setTimeout(() => {
+        columnDrop2()
+      }, 500)
+    })
+
+    _Vue.onUnmounted(() => {
+      clearTimeout(initTime)
+      if (sortable2) {
+        sortable2.destroy()
+      }
+    })
+
     return {
       vxeGrid,
       gridOptions,
@@ -192,8 +244,16 @@ export default _Vue.defineComponent({
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .system-table-box {
     height: 100%;
+
+    .vxe-header--row .vxe-header--column.sortable-ghost,
+    .vxe-header--row .vxe-header--column.sortable-chosen {
+      background-color: #dfecfb;
+    }
+    .vxe-header--row .vxe-header--column.col--fixed {
+      cursor: no-drop;
+    }
   }
 </style>
