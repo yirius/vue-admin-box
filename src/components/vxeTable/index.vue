@@ -9,6 +9,7 @@
 import { defineComponent, onMounted, reactive, ref, computed } from 'vue'
 
 import LayerComponent from '@/components/layer/index.vue';
+import eventBus from '@/utils/admin/eventBus';
 import * as PageRender from '@/utils/admin/pageRender';
 
 import * as _Vue from 'vue'
@@ -94,9 +95,11 @@ export default _Vue.defineComponent({
     }
 
     const _$store = useStore(), _router = _VueRouter.useRouter();
-    vm.opArgs = {Vue: _Vue, VueRouter: _VueRouter, VXETable: _VXETable, XEUtils: _XEUtils,
-      AdminIs: _AdminIs, AdminTool: _AdminTool, RequestApi: _RequestApi, elementPlus: _elementPlus,
-      uploadHttpRequestApi: _uploadHttpRequestApi, $store: _$store, router: _router};
+    window.getOpArgs = () => {
+      return {Vue: _Vue, VueRouter: _VueRouter, VXETable: _VXETable, XEUtils: _XEUtils,
+        AdminIs: _AdminIs, AdminTool: _AdminTool, RequestApi: _RequestApi, elementPlus: _elementPlus,
+        uploadHttpRequestApi: _uploadHttpRequestApi, $store: _$store, router: _router};
+    };
 
     const renderTemplate = (slotData, childrens) => {
       var childrenArray = [];

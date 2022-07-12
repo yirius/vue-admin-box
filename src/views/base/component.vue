@@ -2,7 +2,7 @@
   <div class="box">
     <suspense>
       <ViewBasePage ref="viewBasePageRef" :render-value="renderValue" :model-value="modelValue"
-                    :form-value="formValue" :model-refs-value="modelRefsValue" :use-id-key="useIdKey" v-if="reshowPage"></ViewBasePage>
+                    :form-value="formValue" :model-refs-value="modelRefsValue" :use-id-key="useIdKey" v-if="reshowPage" @refsReady="refsReady"></ViewBasePage>
     </suspense>
   </div>
 </template>
@@ -14,6 +14,7 @@ import ViewBasePage from '@/views/base/page.vue';
 import * as _Vue from 'vue'
 import { useStore } from 'vuex'
 import * as _VueRouter from "vue-router";
+import eventBus from '@/utils/admin/eventBus';
 import { VXETable as _VXETable } from 'vxe-table'
 import _XEUtils from 'xe-utils'
 import * as _AdminIs from '@/utils/is';
@@ -45,9 +46,11 @@ export default defineComponent({
   },
   setup(props, vm) {
     const _$store = useStore(), _router = _VueRouter.useRouter();
-    vm.opArgs = {Vue: _Vue, VueRouter: _VueRouter, VXETable: _VXETable, XEUtils: _XEUtils,
-      AdminIs: _AdminIs, AdminTool: _AdminTool, RequestApi: _RequestApi, elementPlus: _elementPlus,
-      uploadHttpRequestApi: _uploadHttpRequestApi, $store: _$store, router: _router};
+    window.getOpArgs = () => {
+      return {Vue: _Vue, VueRouter: _VueRouter, VXETable: _VXETable, XEUtils: _XEUtils,
+        AdminIs: _AdminIs, AdminTool: _AdminTool, RequestApi: _RequestApi, elementPlus: _elementPlus,
+        uploadHttpRequestApi: _uploadHttpRequestApi, $store: _$store, router: _router};
+    };
 
     // 先判断是否存在props，不存在说明是路由进来的，直接去找
     let jsonPageUrl = props.renderUrl;
@@ -134,7 +137,10 @@ export default defineComponent({
         };
       },
       findRefs(fieldName) {
-        return viewBasePageRef.value.findRefs(fieldName);
+        if(viewBasePageRef.value) {
+          return viewBasePageRef.value.$.exposed.findRefs(fieldName);
+        }
+        return null;
       }
     });
 
@@ -144,7 +150,11 @@ export default defineComponent({
       modelValue,
       renderValue,
       modelRefsValue,
-      viewBasePageRef
+      viewBasePageRef,
+      // refs触发
+      refsReady: () => {
+        vm.emit("refsReady");
+      }
     }
   },
   data() {

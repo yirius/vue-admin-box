@@ -8,29 +8,41 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, defineExpose } from 'vue'
 import type { Ref } from 'vue'
 import * as echarts from 'echarts'
 import { useEventListener } from '@vueuse/core'
 const props = defineProps({
   option: Object
 })
-const chart: Ref<HTMLDivElement|null> = ref(null)
+const chart: Ref<HTMLDivElement|null> = ref(null);
+let chartIns: echarts.ECharts | null = null;
 // 在onMounted事件才能拿到真实dom
 onMounted(() => {
   const dom = chart.value
   if (dom) {
     let option: any = props.option
     // 需要在页面Dom元素加载后再初始化echarts对象
-    let myChart = echarts.init(dom)
-    myChart.setOption(option)
+    chartIns = echarts.init(dom)
+    chartIns.setOption(option)
     // 自动监听加自动销毁
-    useEventListener('resize', () => myChart.resize())
+    useEventListener('resize', () => {
+      if(chartIns) { chartIns.resize() }
+    })
     watch(() => props.option, (newVal: any) => {
-      myChart.setOption(newVal)
+      if (chartIns) {
+        chartIns.setOption(newVal)
+      }
     })
   }
-})
+});
+
+defineExpose({
+  findChart() {
+    return chartIns;
+  }
+});
+
 </script>
 
 <style lang="scss" scoped>

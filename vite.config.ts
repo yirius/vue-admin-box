@@ -34,6 +34,18 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
       proxy: env.VITE_PROXY || {},
     },
     build: {
+      minify: 'terser',
+      // 进行压缩计算
+      brotliSize: false,
+      sourcemap: false,
+      terserOptions: {
+        compress: {
+          // 打包自动删除console
+          drop_console: true,
+          drop_debugger: true
+        },
+        keep_classnames:true,
+      },
       rollupOptions: {
         output: {
           manualChunks(id) {

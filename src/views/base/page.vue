@@ -4,15 +4,15 @@
 <script type="ts">
 
 import * as _Vue from 'vue'
-import _$store from '@/store';
 import * as _VueRouter from "vue-router";
-const _router = _VueRouter.useRouter();
 import { VXETable as _VXETable } from 'vxe-table'
 import _XEUtils from 'xe-utils'
+import _$store from '@/store';
 import * as _AdminIs from '@/utils/is';
 import * as _AdminTool from '@/utils/tools';
 import * as _RequestApi from "@/api/request";
 import * as _elementPlus from 'element-plus';
+import eventBus from '@/utils/admin/eventBus';
 import { uploadHttpRequestApi as _uploadHttpRequestApi } from "@/components/upload/index";
 
 import Tinymce from "@/components/tinymce/index.vue";
@@ -55,9 +55,13 @@ const componentIns = _Vue.defineComponent({
    * @param props
    */
   async setup(props, vm) {
-    vm.opArgs = {Vue: _Vue, VueRouter: _VueRouter, VXETable: _VXETable, XEUtils: _XEUtils,
-      AdminIs: _AdminIs, AdminTool: _AdminTool, RequestApi: _RequestApi, elementPlus: _elementPlus,
-      uploadHttpRequestApi: _uploadHttpRequestApi, $store: _$store, router: _router};
+    const _router = _VueRouter.useRouter();
+
+    window.getOpArgs = () => {
+      return {Vue: _Vue, VueRouter: _VueRouter, VXETable: _VXETable, XEUtils: _XEUtils,
+        AdminIs: _AdminIs, AdminTool: _AdminTool, RequestApi: _RequestApi, elementPlus: _elementPlus,
+        uploadHttpRequestApi: _uploadHttpRequestApi, $store: _$store, router: _router};
+    };
 
     if(props.renderValue.components.length > 0) {
       for (const componentKey in props.renderValue.components) {
@@ -144,6 +148,9 @@ const componentIns = _Vue.defineComponent({
                 } else {
                   if(_AdminIs.isString(item.attrs[attrsKey]) && item.attrs[attrsKey].startsWith("[`eval`]")) {
                     item.attrs[attrsKey] = eval(item.attrs[attrsKey].replace("[`eval`]", ""));
+                    if(attrsKey == "onCheck") {
+                      console.log(item.attrs[attrsKey]);
+                    }
                   }
                 }
               }
@@ -237,6 +244,8 @@ const componentIns = _Vue.defineComponent({
         for (let refKey in renderedTemplate.ref) {
           if(_AdminIs.isObject(renderedTemplate.ref[refKey]) && renderedTemplate.ref[refKey].uid) {
             $refs = renderedTemplate.ref[refKey].refs;
+            // 触发事件
+            vm.emit("refsReady")
           }
         }
       }
