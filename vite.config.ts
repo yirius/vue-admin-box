@@ -1,6 +1,6 @@
 import { ConfigEnv, UserConfigExport, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import { viteMockServe } from 'vite-plugin-mock';
+// import { viteMockServe } from 'vite-plugin-mock';
 import { resolve } from 'path';
 import { configHtmlPlugin } from './build/plugins/html';
 import { parseEnv } from "./src/config/env";
@@ -58,17 +58,17 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
     },
     plugins: [
       vue(),
-      viteMockServe({
-        mockPath: 'mock',
-        localEnabled: command === 'serve',
-        prodEnabled: command !== 'serve' && prodMock,
-        watchFiles: true,
-        injectCode: `
-          import { setupProdMockServer } from '../mockProdServer';
-          setupProdMockServer();
-        `,
-        logger: true,
-      }),
+      // viteMockServe({
+      //   mockPath: 'mock',
+      //   localEnabled: command === 'serve',
+      //   prodEnabled: command !== 'serve' && prodMock,
+      //   watchFiles: true,
+      //   injectCode: `
+      //     import { setupProdMockServer } from '../mockProdServer';
+      //     setupProdMockServer();
+      //   `,
+      //   logger: true,
+      // }),
       configHtmlPlugin(env, isBuild)
     ]
   };
