@@ -1,7 +1,7 @@
 <template>
   <div class="logo-container">
-    <!-- <img src="@/assets/logo.png" alt=""> -->
-    <h1 v-if="!isCollapse">{{ $t(systemTitle) }}</h1>
+    <img v-if="logoData.logoShow" :src="calcLogoSrc" alt="" style="height: 40px">
+    <h1 v-if="logoData.logoTextShow&&!isCollapse">{{ $t(systemTitle) }}</h1>
   </div>
 </template>
 
@@ -9,13 +9,29 @@
 import { defineComponent, computed } from 'vue'
 import { useStore } from 'vuex'
 import { systemTitle } from '@/config'
+import logoData from '@/config'
+import Block from "../../../dist/views/main/pages/work/block.vue";
+import logoSrc from "@/assets/logo.png";
+
+
 export default defineComponent({
+  components: {Block},
   setup() {
     const store = useStore()
     const isCollapse = computed(() => store.state.app.isCollapse)
+    const calcLogoSrc = computed(() => {
+      if(isCollapse.value && logoData.logoSmUrl) {
+        return logoData.logoSmUrl;
+      }
+      return logoData.logoUrl || logoSrc;
+    });
+
     return {
       isCollapse,
-      systemTitle
+      systemTitle,
+      logoData,
+      logoSrc,
+      calcLogoSrc
     }
   }
 })

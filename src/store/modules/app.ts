@@ -1,3 +1,5 @@
+import {getEnv} from "@/config/env";
+
 interface Option<T>  {
   name: keyof optionKey<T>
   value: optionValue<T>
@@ -28,7 +30,7 @@ export interface appState {
 }
 
 const state = () => ({
-  isCollapse: false, // 侧边栏是否收缩展示
+  isCollapse: getEnv().VITE_GLOB_IS_COLLAPSE||false, // 侧边栏是否收缩展示
   contentFullScreen: false, // 内容是否可全屏展示
   showLogo: true, // 是否显示Logo
   fixedTop: false, // 是否固定顶部, todo，暂未使用

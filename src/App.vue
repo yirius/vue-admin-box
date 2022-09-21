@@ -38,4 +38,8 @@ export default defineComponent({
   width: 100%;
   height: 100vh;
 }
+.el-popper .el-menu-item:hover {
+  background-color: var(--system-primary-color) !important;
+  color: var(--system-primary-text-color) !important;
+}
 </style>

@@ -2,6 +2,8 @@ import {getEnv} from "@/config/env";
 const env = getEnv();
 
 export default {
+    // 是否折叠侧边
+    isCollapse: env.VITE_GLOB_IS_COLLAPSE || false,
     // captcha的地址, 如果为""则不显示验证码
     captchaUrl: env.VITE_GLOB_CAPTCHA_URL || "",
     // 登录相关-菜单地址

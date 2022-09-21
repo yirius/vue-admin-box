@@ -27,6 +27,8 @@ export interface ViteEnv {
     VITE_GLOB_APP_SHORT_NAME: string;// 英文名称
     VITE_GLOB_CAPTCHA_URL: string;// 验证码地址
 
+
+    VITE_GLOB_IS_COLLAPSE: boolean;// 是否折叠侧边
     VITE_GLOB_MENU_URL: string;// 登录相关-菜单地址
     VITE_GLOB_LOGIN_URL: string;// 登录相关-地址
     VITE_GLOB_LOGIN_LANG: string;// 登录相关-登录之后加载的基础语言包
@@ -34,6 +36,11 @@ export interface ViteEnv {
     VITE_GLOB_LOGOUT_URL: string;// 登录相关-用户推出登录
     VITE_GLOB_LOGIN_PWD: string;// 登录相关-修改密码
     VITE_GLOB_VUEX_PREVFIX: string;// 设置缓存相关，读取vuex本地缓存的前缀
+
+    VITE_GLOB_LOGO_SHOW: boolean;// 是否显示logo
+    VITE_GLOB_LOGO_TEXT_SHOW: boolean;// 是否显示logo旁边文字
+    VITE_GLOB_LOGO_URL: string;// logo地址
+    VITE_GLOB_LOGO_SM_URL: string;// 小logo地址
 
     VITE_GLOB_REQUEST_BASE: string;// 请求相关-基础路径
     VITE_GLOB_REQUEST_TIMEOUT: number;// 请求相关-超时时间

@@ -47,6 +47,8 @@ import Menu from "./Menu/index.vue";
 import Logo from "./Logo/index.vue";
 import Header from "./Header/index.vue";
 import Tabs from "./Tabs/index.vue";
+import { getEnv } from "@/config/env";
+
 export default defineComponent({
   components: {
     Menu,
@@ -67,7 +69,7 @@ export default defineComponent({
       if (document.body.clientWidth <= 1000 && !isCollapse.value) {
         store.commit("app/isCollapseChange", true);
       } else if (document.body.clientWidth > 1000 && isCollapse.value) {
-        store.commit("app/isCollapseChange", false);
+        store.commit("app/isCollapseChange", getEnv().VITE_GLOB_IS_COLLAPSE);
       }
     };
     // 初始化调用
